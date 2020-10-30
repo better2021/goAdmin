@@ -5,8 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"goAdmin/common"
+	"goAdmin/route"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main()  {
@@ -15,9 +17,11 @@ func main()  {
 	defer db.Close()
 
 	r := gin.Default()
+	r = route.CollectRouter(r)
 	r.GET("/api", func(c *gin.Context) {
 		c.JSON(http.StatusOK,gin.H{
 			"message":"hello golang",
+			"time":time.Now().Format("2006-01-02 15:04:05"),
 		})
 	})
 	port := viper.GetString("server.port")

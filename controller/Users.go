@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // 查询手机号
@@ -46,7 +47,7 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 func Register(ctx *gin.Context) {
 	db := common.InitDB()
 	var user = model.User{}
-	err := ctx.Bind(&user)
+	err := ctx.Bind(&user) // Bind绑定后传json格式
 	if err != nil{
 		ctx.JSON(http.StatusOK,gin.H{
 			"msg":err.Error(),
@@ -143,15 +144,37 @@ func Login(ctx *gin.Context)  {
 }
 
 // 用户信息
-func Info(ctx *gin.Context)  {
-	var user model.User
+func Info(ctx *gin.Context) {
+	user,_ := ctx.Get("user")
+	ctx.JSON(http.StatusOK,gin.H{
+		"data":gin.H{"user":model.ToUserDto(user.(model.User))},
+	})
+}
+
+// 用户列表
+func UserList(ctx *gin.Context){
+	var users []model.User
+	name := ctx.Query("name")
+	pageNum,_ := strconv.Atoi(ctx.DefaultPostForm("pageNum","1"))
+	pageSize,_ := strconv.Atoi(ctx.DefaultPostForm("pageSize","10"))
+	fmt.Println(name,pageNum,pageSize,"--")
+	/*
+		迷糊搜索，name为搜索的条件，根据电影的名称name来搜索
+		Offset 其实条数
+		Limit	 每页的条数
+		Order("id desc") 根据id倒序排序
+		总条数 Count(&count)
+	*/
+	db := common.InitDB()
+	var count int
+	db.Offset((pageNum-1)*pageSize).Limit(pageSize).Where("name LIKE?","%" + name + "%").Order("created_at desc").Find(&users).Count(&count)
 
 	ctx.JSON(http.StatusOK,gin.H{
-		"data":gin.H{
-			"user":gin.H{
-				"name":user.Name,
-				"telephone":user.Telephone,
-			},
+		"msg":"请求成功",
+		"data":users,
+		"attr":gin.H{
+			"page":pageNum,
+			"total":count,
 		},
 	})
 }
