@@ -43,7 +43,17 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 	return true
 }
 
-// 用户注册
+// @Summary 用户注册
+// @Description 用户注册
+// @Tags 用户注册
+// @Accept json
+// @Produce json
+// @Param name query string true "name"
+// @Param telephone query string true "telephone"
+// @Param password query string true "password"
+// @Success 200 {object} model.User
+// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Router /api/v1/auth/register [post]
 func Register(ctx *gin.Context) {
 	db := common.InitDB()
 	var user = model.User{}
@@ -97,7 +107,16 @@ func Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK,gin.H{"msg":"注册成功"})
 }
 
-// 用户登陆
+// @Summary 用户登陆
+// @Description 用户登陆
+// @Tags 用户登陆
+// @Accept json
+// @Produce json
+// @Param telephone query string true "telephone"
+// @Param password query string true "password"
+// @Success 200 {object} model.User
+// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Router /api/v1/auth/login [post]
 func Login(ctx *gin.Context)  {
 	db := common.InitDB()
 	// 获取参数
@@ -143,7 +162,17 @@ func Login(ctx *gin.Context)  {
 	})
 }
 
-// 用户信息
+// @Summary 单个用户信息
+// @Description 用户信息
+// @Tags 用户信息
+// @Accept json
+// @Produce json
+// @Param name query string false "name"
+// @Param telephone query string false "telephone"
+// @Param token query string true "token"
+// @Success 200 {object} model.UserDto
+// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Router /api/v1/auth/info [post]
 func Info(ctx *gin.Context) {
 	user,_ := ctx.Get("user")
 	ctx.JSON(http.StatusOK,gin.H{
@@ -151,7 +180,18 @@ func Info(ctx *gin.Context) {
 	})
 }
 
-// 用户列表
+// @Summary 获取用户列表
+// @Description 用户列表
+// @Tags 用户列表
+// @Accept json
+// @Produce json
+// @Param name query string false "name"
+// @Param telephone query string false "telephone"
+// @Param pageNum query string true "pageNum"
+// @Param pageSize query string true "pageSize"
+// @Success 200 {object} model.User
+// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Router /api/v1/users/ [get]
 func UserList(ctx *gin.Context){
 	var users []model.User
 	name := ctx.Query("name")

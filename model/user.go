@@ -8,9 +8,9 @@ type BasicModel struct {
 
 type User struct {
 	BasicModel
-	Name string `json:"name" gorm:"type:varchar(20);not null"`
-	Telephone string `json:"telephone" gorm:"varchar(110);not null;unique"`
-	Password string `json:"password" gorm:"size:255;not null"`
+	Name string `json:"name" gorm:"type:varchar(20);not null" example:"用户名称"`
+	Telephone string `json:"telephone" gorm:"varchar(110);not null;unique" example:"手机号码"`
+	Password string `json:"password" gorm:"size:255;not null" example:"密码"`
 }
 
 type UserDto struct {

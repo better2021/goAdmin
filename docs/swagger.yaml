@@ -1,0 +1,182 @@
+definitions:
+  model.User:
+    properties:
+      createAt:
+        example: 创建时间
+        type: string
+      id:
+        type: integer
+      name:
+        example: 用户名称
+        type: string
+      password:
+        example: 密码
+        type: string
+      telephone:
+        example: 手机号码
+        type: string
+      updateAt:
+        example: 更新时间
+        type: string
+    type: object
+  model.UserDto:
+    properties:
+      createAt:
+        example: 创建时间
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      telephone:
+        type: string
+      updateAt:
+        example: 更新时间
+        type: string
+    type: object
+info:
+  contact: {}
+  description: An example of gin
+  license:
+    name: MIT //localhost:80
+  termsOfService: 运行地址：http://localhost/swagger/index.html
+  title: Golang Gin API
+  version: "2.0"
+paths:
+  /api/v1/auth/info:
+    post:
+      consumes:
+      - application/json
+      description: 用户信息
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: telephone
+        in: query
+        name: telephone
+        type: string
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserDto'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 单个用户信息
+      tags:
+      - 用户信息
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登陆
+      parameters:
+      - description: telephone
+        in: query
+        name: telephone
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 用户登陆
+      tags:
+      - 用户登陆
+  /api/v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册
+      parameters:
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: telephone
+        in: query
+        name: telephone
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 用户注册
+      tags:
+      - 用户注册
+  /api/v1/users/:
+    get:
+      consumes:
+      - application/json
+      description: 用户列表
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: telephone
+        in: query
+        name: telephone
+        type: string
+      - description: pageNum
+        in: query
+        name: pageNum
+        required: true
+        type: string
+      - description: pageSize
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 获取用户列表
+      tags:
+      - 用户列表
+swagger: "2.0"
