@@ -45,7 +45,7 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 
 // @Summary 用户注册
 // @Description 用户注册
-// @Tags 用户注册
+// @Tags 用户
 // @Accept json
 // @Produce json
 // @Param name query string true "name"
@@ -109,7 +109,7 @@ func Register(ctx *gin.Context) {
 
 // @Summary 用户登陆
 // @Description 用户登陆
-// @Tags 用户登陆
+// @Tags 用户
 // @Accept json
 // @Produce json
 // @Param telephone query string true "telephone"
@@ -164,7 +164,7 @@ func Login(ctx *gin.Context)  {
 
 // @Summary 单个用户信息
 // @Description 用户信息
-// @Tags 用户信息
+// @Tags 用户
 // @Accept json
 // @Produce json
 // @Param name query string false "name"
@@ -182,7 +182,7 @@ func Info(ctx *gin.Context) {
 
 // @Summary 获取用户列表
 // @Description 用户列表
-// @Tags 用户列表
+// @Tags 用户
 // @Accept json
 // @Produce json
 // @Param name query string false "name"
@@ -216,5 +216,27 @@ func UserList(ctx *gin.Context){
 			"page":pageNum,
 			"total":count,
 		},
+	})
+}
+
+// @Summary 删除用户
+// @Tags 用户
+// @Accept json
+// @Produce json
+// @Param id query string true "id"
+// @Success 200 {object} model.User
+// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Router /api/v1/userList/{id} [delete]
+func UserDelete(ctx *gin.Context)  {
+	id,err := strconv.Atoi(ctx.Param("id"))
+	if err != nil{
+		panic(err)
+	}
+
+	fmt.Println(id,"--")
+	db := common.InitDB()
+	db.Where("id=?",id).Delete(model.User{})
+	ctx.JSON(http.StatusOK,gin.H{
+		"msg":"删除成功",
 	})
 }

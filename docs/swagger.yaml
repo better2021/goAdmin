@@ -1,4 +1,30 @@
 definitions:
+  model.Film:
+    properties:
+      actor:
+        example: 演员
+        type: string
+      address:
+        example: 出品地区
+        type: string
+      createAt:
+        example: 创建时间
+        type: string
+      desc:
+        example: 描述
+        type: string
+      id:
+        type: integer
+      name:
+        example: 电影名称
+        type: string
+      updateAt:
+        example: 更新时间
+        type: string
+      year:
+        example: 年份
+        type: string
+    type: object
   model.User:
     properties:
       createAt:
@@ -75,7 +101,7 @@ paths:
             type: string
       summary: 单个用户信息
       tags:
-      - 用户信息
+      - 用户
   /api/v1/auth/login:
     post:
       consumes:
@@ -105,7 +131,7 @@ paths:
             type: string
       summary: 用户登陆
       tags:
-      - 用户登陆
+      - 用户
   /api/v1/auth/register:
     post:
       consumes:
@@ -140,7 +166,178 @@ paths:
             type: string
       summary: 用户注册
       tags:
-      - 用户注册
+      - 用户
+  /api/v1/film/:
+    get:
+      consumes:
+      - application/json
+      description: 电影列表
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: pageNum
+        in: query
+        name: pageNum
+        required: true
+        type: string
+      - description: pageSize
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Film'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 获取电影列表
+      tags:
+      - 电影
+    post:
+      consumes:
+      - application/json
+      description: 创建电影
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: year
+        in: query
+        name: year
+        type: string
+      - description: address
+        in: query
+        name: address
+        type: string
+      - description: actor
+        in: query
+        name: actor
+        type: string
+      - description: desc
+        in: query
+        name: desc
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Film'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 创建电影列表
+      tags:
+      - 电影
+  /api/v1/film/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 电影列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Film'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 删除电影列表
+      tags:
+      - 电影
+    put:
+      consumes:
+      - application/json
+      description: 电影列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Film'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 更新电影列表
+      tags:
+      - 电影
+  /api/v1/upload/:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 文件上传
+      parameters:
+      - description: file
+        in: query
+        name: file
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{ "code": 200, "message": "上传成功" }'
+          schema:
+            type: string
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 文件上传
+      tags:
+      - 文件上传
+  /api/v1/userList/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 删除用户
+      tags:
+      - 用户
   /api/v1/users/:
     get:
       consumes:
@@ -178,5 +375,5 @@ paths:
             type: string
       summary: 获取用户列表
       tags:
-      - 用户列表
+      - 用户
 swagger: "2.0"

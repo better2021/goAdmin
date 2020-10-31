@@ -38,7 +38,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户信息"
+                    "用户"
                 ],
                 "summary": "单个用户信息",
                 "parameters": [
@@ -88,7 +88,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户登陆"
+                    "用户"
                 ],
                 "summary": "用户登陆",
                 "parameters": [
@@ -133,7 +133,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户注册"
+                    "用户"
                 ],
                 "summary": "用户注册",
                 "parameters": [
@@ -175,6 +175,265 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/film/": {
+            "get": {
+                "description": "电影列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "电影"
+                ],
+                "summary": "获取电影列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pageNum",
+                        "name": "pageNum",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "pageSize",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Film"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "创建电影",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "电影"
+                ],
+                "summary": "创建电影列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "year",
+                        "name": "year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "address",
+                        "name": "address",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "actor",
+                        "name": "actor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "desc",
+                        "name": "desc",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Film"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/film/{id}": {
+            "put": {
+                "description": "电影列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "电影"
+                ],
+                "summary": "更新电影列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Film"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "电影列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "电影"
+                ],
+                "summary": "删除电影列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Film"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/upload/": {
+            "post": {
+                "description": "文件上传",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文件上传"
+                ],
+                "summary": "文件上传",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "file",
+                        "name": "file",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ \"code\": 200, \"message\": \"上传成功\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/userList/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users/": {
             "get": {
                 "description": "用户列表",
@@ -185,7 +444,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户列表"
+                    "用户"
                 ],
                 "summary": "获取用户列表",
                 "parameters": [
@@ -234,6 +493,42 @@ var doc = `{
         }
     },
     "definitions": {
+        "model.Film": {
+            "type": "object",
+            "properties": {
+                "actor": {
+                    "type": "string",
+                    "example": "演员"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "出品地区"
+                },
+                "createAt": {
+                    "type": "string",
+                    "example": "创建时间"
+                },
+                "desc": {
+                    "type": "string",
+                    "example": "描述"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "电影名称"
+                },
+                "updateAt": {
+                    "type": "string",
+                    "example": "更新时间"
+                },
+                "year": {
+                    "type": "string",
+                    "example": "年份"
+                }
+            }
+        },
         "model.User": {
             "type": "object",
             "properties": {

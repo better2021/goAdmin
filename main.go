@@ -25,7 +25,7 @@ func main()  {
 	gin.DefaultErrorWriter = io.MultiWriter(f) // 错误信息写入gin.log日志文件
 
 	InitConfig()
-	db := common.InitDB() // 初始化数据库
+	var db = common.InitDB() // 初始化数据库
 	defer db.Close()
 
 	r := gin.Default()
