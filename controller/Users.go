@@ -13,6 +13,8 @@ import (
 	"strconv"
 )
 
+var db = common.InitDB() // 初始化数据库连接
+
 // 查询手机号
 func isTelephoneExis(db *gorm.DB,telephone string) bool{
 	var user model.User
@@ -55,7 +57,7 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/auth/register [post]
 func Register(ctx *gin.Context) {
-	db := common.InitDB()
+	// db := common.InitDB()
 	var user = model.User{}
 	err := ctx.Bind(&user) // Bind绑定后传json格式
 	if err != nil{
@@ -118,7 +120,7 @@ func Register(ctx *gin.Context) {
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/auth/login [post]
 func Login(ctx *gin.Context)  {
-	db := common.InitDB()
+	// db := common.InitDB()
 	// 获取参数
 	telephone := ctx.PostForm("telephone")
 	password := ctx.PostForm("password")
@@ -205,7 +207,7 @@ func UserList(ctx *gin.Context){
 		Order("id desc") 根据id倒序排序
 		总条数 Count(&count)
 	*/
-	db := common.InitDB()
+	// db := common.InitDB()
 	var count int
 	db.Offset((pageNum-1)*pageSize).Limit(pageSize).Where("name LIKE?","%" + name + "%").Order("created_at desc").Find(&users).Count(&count)
 
@@ -234,7 +236,7 @@ func UserDelete(ctx *gin.Context)  {
 	}
 
 	fmt.Println(id,"--")
-	db := common.InitDB()
+	// db := common.InitDB()
 	db.Where("id=?",id).Delete(model.User{})
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"删除成功",

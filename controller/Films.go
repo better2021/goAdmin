@@ -3,13 +3,10 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"goAdmin/common"
 	"goAdmin/model"
 	"net/http"
 	"strconv"
 )
-
-// var db = common.InitDB() // 初始化数据库连接
 
 // @Summary 获取电影列表
 // @Description 电影列表
@@ -22,8 +19,7 @@ import (
 // @Success 200 {object} model.Film
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/film/ [get]
-func FilmList(ctx *gin.Context)  {
-	db := common.InitDB()
+func FilmList(ctx *gin.Context) {
 	var films []model.Film
 
 	name := ctx.Query("name")
@@ -32,7 +28,7 @@ func FilmList(ctx *gin.Context)  {
 	fmt.Println(name,pageNum,pageSize,"--")
 
 	var count int // 总数据条数
-	db.Where("name LIKE ?","%name%").Offset((pageNum-1)*pageSize).Order("id desc").Find(&films).Count(count)
+	db.Where("name LIKE ?","%name%").Offset((pageNum-1)*pageSize).Order("id desc").Find(&films).Count(&count)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",
@@ -58,7 +54,6 @@ func FilmList(ctx *gin.Context)  {
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/film/ [post]
 func FilmCreate(ctx *gin.Context) {
-	db := common.InitDB()
 	var data = &model.Film{}
 	err := ctx.Bind(data)
 	if err != nil{
@@ -84,7 +79,6 @@ func FilmCreate(ctx *gin.Context) {
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
 // @Router /api/v1/film/{id} [put]
 func FilmUodate(ctx *gin.Context) {
-	db := common.InitDB()
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")
 
@@ -112,7 +106,6 @@ func FilmUodate(ctx *gin.Context) {
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
 // @Router /api/v1/film/{id} [delete]
 func FilmDelete(ctx *gin.Context)  {
-	db := common.InitDB()
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")
 
