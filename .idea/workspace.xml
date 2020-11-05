@@ -3,11 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="7b4e5de5-047e-4fad-9047-e3bb9028a59d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/database.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/Films.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/Films.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/Users.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/Users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/uploadFile.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/uploadFile.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/docs/docs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/route/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/route/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmp/runner-build.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/runner-build.exe" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

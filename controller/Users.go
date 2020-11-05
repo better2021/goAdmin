@@ -193,7 +193,7 @@ func Info(ctx *gin.Context) {
 // @Param pageSize query string true "pageSize"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/users/ [get]
+// @Router /api/v1/users [get]
 func UserList(ctx *gin.Context){
 	var users []model.User
 	name := ctx.Query("name")
@@ -228,7 +228,7 @@ func UserList(ctx *gin.Context){
 // @Param id query string true "id"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/userList/{id} [delete]
+// @Router /api/v1/users/{id} [delete]
 func UserDelete(ctx *gin.Context)  {
 	id,err := strconv.Atoi(ctx.Param("id"))
 	if err != nil{

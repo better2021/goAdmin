@@ -1,4 +1,27 @@
 definitions:
+  model.Book:
+    properties:
+      author:
+        example: 作者
+        type: string
+      createAt:
+        example: 创建时间
+        type: string
+      desc:
+        example: 描述
+        type: string
+      id:
+        type: integer
+      title:
+        example: 书籍名称
+        type: string
+      updateAt:
+        example: 更新时间
+        type: string
+      year:
+        example: 年份
+        type: string
+    type: object
   model.Film:
     properties:
       actor:
@@ -167,7 +190,125 @@ paths:
       summary: 用户注册
       tags:
       - 用户
-  /api/v1/film/:
+  /api/v1/books:
+    get:
+      consumes:
+      - application/json
+      description: 书籍列表
+      parameters:
+      - description: title
+        in: query
+        name: name
+        type: string
+      - description: pageNum
+        in: query
+        name: pageNum
+        required: true
+        type: string
+      - description: pageSize
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Book'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 获取书籍列表
+      tags:
+      - 书籍
+    post:
+      consumes:
+      - application/json
+      description: 创建书籍
+      parameters:
+      - description: title
+        in: query
+        name: name
+        type: string
+      - description: year
+        in: query
+        name: year
+        type: string
+      - description: author
+        in: query
+        name: actor
+        type: string
+      - description: desc
+        in: query
+        name: desc
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Book'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 创建书籍列表
+      tags:
+      - 书籍
+  /api/v1/books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 书籍列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Book'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 删除书籍列表
+      tags:
+      - 书籍
+    put:
+      consumes:
+      - application/json
+      description: 书籍列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Book'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 更新书籍列表
+      tags:
+      - 书籍
+  /api/v1/films:
     get:
       consumes:
       - application/json
@@ -240,7 +381,7 @@ paths:
       summary: 创建电影列表
       tags:
       - 电影
-  /api/v1/film/{id}:
+  /api/v1/films/{id}:
     delete:
       consumes:
       - application/json
@@ -289,7 +430,7 @@ paths:
       summary: 更新电影列表
       tags:
       - 电影
-  /api/v1/upload/:
+  /api/v1/upload:
     post:
       consumes:
       - multipart/form-data
@@ -314,31 +455,7 @@ paths:
       summary: 文件上传
       tags:
       - 文件上传
-  /api/v1/userList/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: id
-        in: query
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.User'
-        "400":
-          description: '{ "code": 400, "message": "请求失败" }'
-          schema:
-            type: string
-      summary: 删除用户
-      tags:
-      - 用户
-  /api/v1/users/:
+  /api/v1/users:
     get:
       consumes:
       - application/json
@@ -374,6 +491,30 @@ paths:
           schema:
             type: string
       summary: 获取用户列表
+      tags:
+      - 用户
+  /api/v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 删除用户
       tags:
       - 用户
 swagger: "2.0"

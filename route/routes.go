@@ -21,6 +21,11 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 		v1.PUT("/films/:id",controller.FilmUodate)
 		v1.DELETE("/films/:id",controller.FilmDelete)
 
+		v1.GET("/books",controller.BookList)
+		v1.POST("/books",controller.BookCreate)
+		v1.PUT("/books/:id",controller.BookUpdate)
+		v1.DELETE("/books/:id",controller.BookDelete)
+
 		v1.POST("/upload",controller.UploadFile)
 	}
 

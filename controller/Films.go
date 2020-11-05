@@ -18,7 +18,7 @@ import (
 // @Param pageSize query string true "pageSize"
 // @Success 200 {object} model.Film
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/film/ [get]
+// @Router /api/v1/films [get]
 func FilmList(ctx *gin.Context) {
 	var films []model.Film
 
@@ -52,7 +52,7 @@ func FilmList(ctx *gin.Context) {
 // @Param desc query string false "desc"
 // @Success 200 {object} model.Film
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/film/ [post]
+// @Router /api/v1/films [post]
 func FilmCreate(ctx *gin.Context) {
 	var data = &model.Film{}
 	err := ctx.Bind(data)
@@ -77,7 +77,7 @@ func FilmCreate(ctx *gin.Context) {
 // @Param id path string true "id"
 // @Success 200 {object} model.Film
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
-// @Router /api/v1/film/{id} [put]
+// @Router /api/v1/films/{id} [put]
 func FilmUodate(ctx *gin.Context) {
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")
@@ -104,7 +104,7 @@ func FilmUodate(ctx *gin.Context) {
 // @Param id path string true "id"
 // @Success 200 {object} model.Film
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
-// @Router /api/v1/film/{id} [delete]
+// @Router /api/v1/films/{id} [delete]
 func FilmDelete(ctx *gin.Context)  {
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")

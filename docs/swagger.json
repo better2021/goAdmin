@@ -158,7 +158,185 @@
                 }
             }
         },
-        "/api/v1/film/": {
+        "/api/v1/books": {
+            "get": {
+                "description": "书籍列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "书籍"
+                ],
+                "summary": "获取书籍列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pageNum",
+                        "name": "pageNum",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "pageSize",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "创建书籍",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "书籍"
+                ],
+                "summary": "创建书籍列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "year",
+                        "name": "year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "author",
+                        "name": "actor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "desc",
+                        "name": "desc",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/{id}": {
+            "put": {
+                "description": "书籍列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "书籍"
+                ],
+                "summary": "更新书籍列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "书籍列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "书籍"
+                ],
+                "summary": "删除书籍列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/films": {
             "get": {
                 "description": "电影列表",
                 "consumes": [
@@ -268,7 +446,7 @@
                 }
             }
         },
-        "/api/v1/film/{id}": {
+        "/api/v1/films/{id}": {
             "put": {
                 "description": "电影列表",
                 "consumes": [
@@ -342,7 +520,7 @@
                 }
             }
         },
-        "/api/v1/upload/": {
+        "/api/v1/upload": {
             "post": {
                 "description": "文件上传",
                 "consumes": [
@@ -380,44 +558,7 @@
                 }
             }
         },
-        "/api/v1/userList/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "删除用户",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
-                    },
-                    "400": {
-                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/users/": {
+        "/api/v1/users": {
             "get": {
                 "description": "用户列表",
                 "consumes": [
@@ -473,9 +614,78 @@
                     }
                 }
             }
+        },
+        "/api/v1/users/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "model.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "type": "string",
+                    "example": "作者"
+                },
+                "createAt": {
+                    "type": "string",
+                    "example": "创建时间"
+                },
+                "desc": {
+                    "type": "string",
+                    "example": "描述"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "书籍名称"
+                },
+                "updateAt": {
+                    "type": "string",
+                    "example": "更新时间"
+                },
+                "year": {
+                    "type": "string",
+                    "example": "年份"
+                }
+            }
+        },
         "model.Film": {
             "type": "object",
             "properties": {
