@@ -207,7 +207,6 @@ func UserList(ctx *gin.Context){
 		Order("id desc") 根据id倒序排序
 		总条数 Count(&count)
 	*/
-	// db := common.InitDB()
 	var count int
 	db.Offset((pageNum-1)*pageSize).Limit(pageSize).Where("name LIKE?","%" + name + "%").Order("created_at desc").Find(&users).Count(&count)
 
@@ -229,14 +228,23 @@ func UserList(ctx *gin.Context){
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/users/{id} [delete]
-func UserDelete(ctx *gin.Context)  {
+func UserDelete(ctx *gin.Context) {
 	id,err := strconv.Atoi(ctx.Param("id"))
 	if err != nil{
 		panic(err)
 	}
 
+	var u model.User
+	db.Where("id=?",id).Find(&u)	// 查找到对应id的整行数据
+	fmt.Println(u)
+	if u.Name == "coco"{	// 查找对应id的数据中判断是否有name为coco的数据
+		ctx.JSON(http.StatusOK,gin.H{
+			"msg":"coco是管理员不能删除",
+		})
+		return
+	}
+
 	fmt.Println(id,"--")
-	// db := common.InitDB()
 	db.Where("id=?",id).Delete(model.User{})
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"删除成功",
