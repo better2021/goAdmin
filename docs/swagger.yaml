@@ -53,13 +53,12 @@ definitions:
       createAt:
         example: 创建时间
         type: string
+      desc:
+        type: string
       id:
         type: integer
       name:
         example: 用户名称
-        type: string
-      password:
-        example: 密码
         type: string
       telephone:
         example: 手机号码
@@ -73,8 +72,8 @@ definitions:
       createAt:
         example: 创建时间
         type: string
-      id:
-        type: integer
+      desc:
+        type: string
       name:
         type: string
       telephone:
@@ -93,7 +92,7 @@ info:
   version: "2.0"
 paths:
   /api/v1/auth/info:
-    post:
+    get:
       consumes:
       - application/json
       description: 用户信息
@@ -515,6 +514,30 @@ paths:
           schema:
             type: string
       summary: 删除用户
+      tags:
+      - 用户
+    put:
+      consumes:
+      - application/json
+      description: 用户信息
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 更新用户信息
       tags:
       - 用户
 swagger: "2.0"

@@ -29,7 +29,7 @@ var doc = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/api/v1/auth/info": {
-            "post": {
+            "get": {
                 "description": "用户信息",
                 "consumes": [
                     "application/json"
@@ -633,6 +633,42 @@ var doc = `{
             }
         },
         "/api/v1/users/{id}": {
+            "put": {
+                "description": "用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "更新用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "consumes": [
                     "application/json"
@@ -746,16 +782,15 @@ var doc = `{
                     "type": "string",
                     "example": "创建时间"
                 },
+                "desc": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
                     "type": "string",
                     "example": "用户名称"
-                },
-                "password": {
-                    "type": "string",
-                    "example": "密码"
                 },
                 "telephone": {
                     "type": "string",
@@ -774,8 +809,8 @@ var doc = `{
                     "type": "string",
                     "example": "创建时间"
                 },
-                "id": {
-                    "type": "integer"
+                "desc": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"

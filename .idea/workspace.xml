@@ -3,8 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="7b4e5de5-047e-4fad-9047-e3bb9028a59d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/Films.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/Films.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/Users.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/Users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/route/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/route/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmp/runner-build.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/runner-build.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util/util.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/util.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

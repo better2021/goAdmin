@@ -109,6 +109,36 @@ func Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK,gin.H{"msg":"注册成功"})
 }
 
+// @Summary 更新用户信息
+// @Description 用户信息
+// @Tags 用户
+// @Accept json
+// @Produce json
+// @Param id path string true "id"
+// @Success 200 {object} model.User
+// @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
+// @Router /api/v1/users/{id} [put]
+func ChangePassword(ctx *gin.Context){
+	id,_ := strconv.Atoi(ctx.Param("id"))
+
+	data := &model.User{}
+	hasedPassword,_ := bcrypt.GenerateFromPassword([]byte(data.Password),bcrypt.DefaultCost)
+	fmt.Println(string(hasedPassword),"-***-")
+
+	err := ctx.Bind(data)
+	data.Password = string(hasedPassword)
+	if err != nil{
+		fmt.Println(err)
+		return
+	}
+
+	db.Model(data).Where("id=?",id).Update(data)
+	ctx.JSON(http.StatusOK,gin.H{
+		"msg":"更新成功",
+		"data":data,
+	})
+}
+
 // @Summary 用户登陆
 // @Description 用户登陆
 // @Tags 用户
@@ -174,11 +204,17 @@ func Login(ctx *gin.Context)  {
 // @Param token query string true "token"
 // @Success 200 {object} model.UserDto
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/auth/info [post]
+// @Router /api/v1/auth/info [get]
 func Info(ctx *gin.Context) {
 	user,_ := ctx.Get("user")
+	fmt.Println(user,"user")
+	ip := util.GetClientIp()
+	clientIp := util.ClientIP(ctx.Request)
 	ctx.JSON(http.StatusOK,gin.H{
 		"data":gin.H{"user":model.ToUserDto(user.(model.User))},
+		"clientIp":clientIp,
+		"公网ip":ip,
+		"客户ip":ctx.ClientIP(),
 	})
 }
 
@@ -210,9 +246,17 @@ func UserList(ctx *gin.Context){
 	var count int
 	db.Offset((pageNum-1)*pageSize).Limit(pageSize).Where("name LIKE?","%" + name + "%").Order("created_at desc").Find(&users).Count(&count)
 
+	ip := util.GetClientIp()
+	serverIp := util.GetServerIP()
+	publicIP := util.ClientPublicIP(ctx.Request)
+	RemoteIP := util.RemoteIP(ctx.Request)
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",
 		"data":users,
+		"ip":ip,
+		"serverIp":serverIp,
+		"publicIP":publicIP,
+		"RemoteIP":RemoteIP,
 		"attr":gin.H{
 			"page":pageNum,
 			"total":count,

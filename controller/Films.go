@@ -78,7 +78,7 @@ func FilmCreate(ctx *gin.Context) {
 // @Success 200 {object} model.Film
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
 // @Router /api/v1/films/{id} [put]
-func FilmUodate(ctx *gin.Context) {
+func FilmUpdate(ctx *gin.Context) {
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")
 
