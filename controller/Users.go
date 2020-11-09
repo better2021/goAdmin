@@ -214,7 +214,7 @@ func Login(ctx *gin.Context)  {
 func Info(ctx *gin.Context) {
 	user,_ := ctx.Get("user")
 	fmt.Println(user,"user")
-	publicIP := util.ClientPublicIP()
+	publicIP := util.ClientPublicIP() // 和ctx.ClientIP() 内置方法差不多
 	clientIp := util.ClientIP(ctx.Request)
 	ctx.JSON(http.StatusOK,gin.H{
 		"data":gin.H{"user":model.ToUserDto(user.(model.User))},
