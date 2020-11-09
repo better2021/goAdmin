@@ -10,7 +10,7 @@ import (
 func IPAuthMiddleWare() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ipList := []string{ // IP白名单
-			"127.0.0.1", "192.168.10.17",
+			"127.0.0.1", "192.168.10.17","192.168.100.155",
 		}
 		flag := false	/*如果要改为ip黑名单把flag:=false 改为true 调换即可*/
 		clientIp := ctx.ClientIP()

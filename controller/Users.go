@@ -57,7 +57,6 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/auth/register [post]
 func Register(ctx *gin.Context) {
-	// db := common.InitDB()
 	var user = model.User{}
 	err := ctx.Bind(&user) // Bind绑定后传json格式
 	if err != nil{
@@ -71,6 +70,10 @@ func Register(ctx *gin.Context) {
 	name := user.Name
 	telephone := user.Telephone
 	password := user.Password
+	desc := user.Desc
+
+	fmt.Println(user,"user")
+	log.Println(name,password,telephone)
 	// 获取参数
 	isReturn := isRight(telephone,password,ctx)
 	if !isReturn{
@@ -81,7 +84,7 @@ func Register(ctx *gin.Context) {
 	if len(name) == 0{
 		name = util.RandomString(10)
 	}
-	log.Println(name,password,telephone)
+
 	// 判断手机号是否存在
 	if isTelephoneExis(db,telephone){
 		ctx.JSON(http.StatusUnprocessableEntity,gin.H{
@@ -102,6 +105,7 @@ func Register(ctx *gin.Context) {
 		Name:      name,
 		Telephone: telephone,
 		Password:  string(hasedPassword),
+		Desc: desc,
 	}
 	db.Create(&newUser)
 
@@ -150,7 +154,6 @@ func ChangePassword(ctx *gin.Context){
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/auth/login [post]
 func Login(ctx *gin.Context)  {
-	// db := common.InitDB()
 	// 获取参数
 	telephone := ctx.PostForm("telephone")
 	password := ctx.PostForm("password")
@@ -168,6 +171,9 @@ func Login(ctx *gin.Context)  {
 		ctx.JSON(http.StatusUnprocessableEntity,gin.H{"msg":"用户不存在"})
 		return
 	}
+
+	user.IP = ctx.ClientIP() // 给user的ip字段赋值
+	db.Save(&user)	// 保存并更新数据
 
 	// 判断密码是否正确
 	fmt.Println(user.Password,"---")
@@ -189,7 +195,7 @@ func Login(ctx *gin.Context)  {
 
 	// 返回结果
 	ctx.JSON(http.StatusOK,gin.H{
-		"data":gin.H{"token":token},
+		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP},
 		"msg":"登录成功",
 	})
 }
@@ -208,12 +214,12 @@ func Login(ctx *gin.Context)  {
 func Info(ctx *gin.Context) {
 	user,_ := ctx.Get("user")
 	fmt.Println(user,"user")
-	ip := util.GetClientIp()
+	publicIP := util.ClientPublicIP()
 	clientIp := util.ClientIP(ctx.Request)
 	ctx.JSON(http.StatusOK,gin.H{
 		"data":gin.H{"user":model.ToUserDto(user.(model.User))},
 		"clientIp":clientIp,
-		"公网ip":ip,
+		"公网ip":publicIP,
 		"客户ip":ctx.ClientIP(),
 	})
 }
@@ -248,14 +254,12 @@ func UserList(ctx *gin.Context){
 
 	ip := util.GetClientIp()
 	serverIp := util.GetServerIP()
-	publicIP := util.ClientPublicIP(ctx.Request)
 	RemoteIP := util.RemoteIP(ctx.Request)
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",
 		"data":users,
 		"ip":ip,
 		"serverIp":serverIp,
-		"publicIP":publicIP,
 		"RemoteIP":RemoteIP,
 		"attr":gin.H{
 			"page":pageNum,
