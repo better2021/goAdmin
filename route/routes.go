@@ -7,7 +7,7 @@ import (
 )
 
 func CollectRouter(r *gin.Engine) *gin.Engine{
-	r.Use(middleware.CorsMiddleware(),middleware.RecoveryMiddleware()) // 使用跨域中间件 和 cover() 中间件
+	r.Use(middleware.CorsMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/users",controller.UserList)
