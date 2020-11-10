@@ -91,3 +91,26 @@ func RemoteIP(r *http.Request) string {
 
 	return ""
 }
+
+// 获取星期
+func Getweek() string {
+	var datStr string
+	day := time.Now().Weekday()
+	switch day {
+	case 0:
+		datStr = "星期天"
+	case 1:
+		datStr = "星期一"
+	case 2:
+		datStr = "星期二"
+	case 3:
+		datStr = "星期三"
+	case 4:
+		datStr = "星期四"
+	case 5:
+		datStr = "星期五"
+	case 6:
+		datStr = "星期六"
+	}
+	return datStr
+}
