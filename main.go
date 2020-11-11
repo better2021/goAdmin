@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/skip2/go-qrcode"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
@@ -34,10 +35,16 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	r.GET("/api", func(c *gin.Context) {
+		host := c.Request.Host
+		err := qrcode.WriteFile(host + "/swagger/index.html",qrcode.Medium,256,"./uploadFiles/qrcode.png")
+		if err !=nil{
+			panic(err)
+		}
 		c.JSON(http.StatusOK, gin.H{
 			"message": "hello golang",
 			"time":    time.Now().Format("2006-01-02 15:04:05"),
 			"week":	util.Getweek(),
+			"qrcode":"http://" + host + "/static/qrcode.png",
 		})
 	})
 	port := viper.GetString("server.port")
