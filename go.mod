@@ -9,7 +9,6 @@ require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-openapi/spec v0.19.12 // indirect
-	github.com/gorilla/sessions v1.1.3
 	github.com/jinzhu/gorm v1.9.16
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
