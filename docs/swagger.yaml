@@ -57,8 +57,14 @@ definitions:
         type: string
       id:
         type: integer
+      ip:
+        type: string
       name:
         example: 用户名称
+        type: string
+      password:
+        description: 字段不暴露给用户，则使用 `json:"-"` 修饰
+        example: 密码
         type: string
       telephone:
         example: 手机号码
@@ -429,6 +435,21 @@ paths:
       summary: 更新电影列表
       tags:
       - 电影
+  /api/v1/getCode:
+    get:
+      consumes:
+      - application/json
+      description: 获取验证码
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 获取验证码
+      tags:
+      - 验证码
   /api/v1/upload:
     post:
       consumes:

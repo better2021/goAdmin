@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"goAdmin/common"
@@ -157,6 +158,7 @@ func Login(ctx *gin.Context)  {
 	// 获取参数
 	telephone := ctx.PostForm("telephone")
 	password := ctx.PostForm("password")
+	code := ctx.PostForm("code")
 
 	// 数据验证
 	isReturn := isRight(telephone,password,ctx)
@@ -176,10 +178,23 @@ func Login(ctx *gin.Context)  {
 	db.Save(&user)	// 保存并更新数据
 
 	// 判断密码是否正确
-	fmt.Println(user.Password,"---")
+	fmt.Println(user.Password,"password")
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(password));err!=nil{
 		fmt.Println(err)
 		ctx.JSON(http.StatusBadRequest,gin.H{"msg":"密码错误"})
+		return
+	}
+
+	// 判断验证码是否正确
+	session := sessions.Default(ctx)
+	captchaId := session.Get("captchaId").(string)
+
+	verifyResult := util.VerfiyCaptcha(captchaId,code)
+	if !verifyResult{
+		ctx.JSON(http.StatusUnauthorized,gin.H{
+			"code":http.StatusUnauthorized,
+			"msg":"验证码输入错误",
+		})
 		return
 	}
 

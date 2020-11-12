@@ -537,6 +537,29 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/getCode": {
+            "get": {
+                "description": "获取验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "验证码"
+                ],
+                "summary": "获取验证码",
+                "responses": {
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/upload": {
             "post": {
                 "description": "文件上传",
@@ -788,9 +811,17 @@ var doc = `{
                 "id": {
                     "type": "integer"
                 },
+                "ip": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string",
                     "example": "用户名称"
+                },
+                "password": {
+                    "description": "字段不暴露给用户，则使用 ` + "`" + `json:\"-\"` + "`" + ` 修饰",
+                    "type": "string",
+                    "example": "密码"
                 },
                 "telephone": {
                     "type": "string",
