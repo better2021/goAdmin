@@ -43,7 +43,7 @@ func main() {
 		}
 
 		var visit model.Visit
-		db.Find(&visit)
+		db.Find(&visit)  // 等价于 	db.Raw("SELECT * FROM visits").Scan(&visit)
 		visit.VisitNum ++
 		db.Save(&visit)
 
