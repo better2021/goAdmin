@@ -59,5 +59,6 @@ func main() {
 	if port != "" {
 		panic(r.Run(":" + port))
 	}
+
 	r.Run(port)
 }
