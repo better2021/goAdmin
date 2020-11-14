@@ -8,6 +8,7 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"goAdmin/common"
 	_ "goAdmin/docs" // 注意这个一定要引入自己的docs
+	"goAdmin/model"
 	"goAdmin/route"
 	"goAdmin/util"
 	"io"
@@ -36,15 +37,22 @@ func main() {
 
 	r.GET("/api", func(c *gin.Context) {
 		host := c.Request.Host
-		err := qrcode.WriteFile(host + "/swagger/index.html",qrcode.Medium,256,"./uploadFiles/qrcode.png")
-		if err !=nil{
+		err := qrcode.WriteFile(host+"/swagger/index.html", qrcode.Medium, 256, "./uploadFiles/qrcode.png")
+		if err != nil {
 			panic(err)
 		}
+
+		var visit model.Visit
+		db.Find(&visit)
+		visit.VisitNum ++
+		db.Save(&visit)
+
 		c.JSON(http.StatusOK, gin.H{
 			"message": "hello golang",
 			"time":    time.Now().Format("2006-01-02 15:04:05"),
-			"week":	util.Getweek(),
-			"qrcode":"http://" + host + "/static/qrcode.png",
+			"week":    util.Getweek(),
+			"qrcode":  "http://" + host + "/static/qrcode.png",
+			"visitNum":visit.VisitNum,
 		})
 	})
 	port := viper.GetString("server.port")

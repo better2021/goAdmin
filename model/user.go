@@ -32,3 +32,7 @@ func ToUserDto(user User) UserDto{
 		Desc: user.Desc,
 	}
 }
+
+type Visit struct {
+	VisitNum int `json:"visit_num" example:"访问次数"`
+}

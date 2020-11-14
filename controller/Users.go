@@ -257,6 +257,7 @@ func UserList(ctx *gin.Context){
 	pageNum,_ := strconv.Atoi(ctx.DefaultPostForm("pageNum","1"))
 	pageSize,_ := strconv.Atoi(ctx.DefaultPostForm("pageSize","10"))
 	fmt.Println(name,pageNum,pageSize,"--")
+
 	/*
 		迷糊搜索，name为搜索的条件，根据电影的名称name来搜索
 		Offset 其实条数
