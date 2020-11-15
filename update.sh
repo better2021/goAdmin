@@ -20,8 +20,8 @@ while read FILM
 do
   if [ "$FILM" ]
   then
-    echo "是的！github 是一个好网站"
-  else
     echo "是的！$FILM 是一个好网站"
+  else
+    echo "是的！github 是一个好网站"
   fi
 done
