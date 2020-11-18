@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"goAdmin/common"
@@ -159,8 +158,9 @@ func Login(ctx *gin.Context)  {
 	telephone := ctx.PostForm("telephone")
 	password := ctx.PostForm("password")
 	code := ctx.PostForm("code")
+	captchaId := ctx.PostForm("captchaId")
 
-	fmt.Println(telephone,password,code,"--")
+	fmt.Println(telephone,password,code,captchaId,"--")
 	// 数据验证
 	isReturn := isRight(telephone,password,ctx)
 	if !isReturn {
@@ -187,13 +187,13 @@ func Login(ctx *gin.Context)  {
 	}
 
 	// 判断验证码是否正确
-	session := sessions.Default(ctx)
-	if session.Get("captchaId")==nil{
-		ctx.String(http.StatusUnauthorized,"未获取到验证码信息")
+	if captchaId == ""{
+		ctx.JSON(http.StatusUnauthorized,gin.H{
+			"code":http.StatusUnauthorized,
+			"msg":"captchaId参数是必传",
+		})
 		return
 	}
-	captchaId := session.Get("captchaId").(string)
-	fmt.Println(captchaId,"captchaId")
 
 	verifyResult := util.VerfiyCaptcha(captchaId,code)
 	if !verifyResult{

@@ -1,8 +1,6 @@
 package route
 
 import (
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"goAdmin/controller"
 	"goAdmin/middleware"
@@ -13,13 +11,8 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 	// 静态资源文件
 	r.StaticFS("/static",http.Dir("uploadFiles"))
 
-	// 声明
-	// "session":业务session名
-	store := cookie.NewStore([]byte("secret"))
-	r.Use(sessions.Sessions("session", store))
-
 	r.Use(middleware.CorsMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
-	v1 := r.Group("/api/v1")
+	v1 := r.Group("/api")
 	{
 		v1.GET("/users",controller.UserList)
 		v1.POST("/auth/register",controller.Register)
