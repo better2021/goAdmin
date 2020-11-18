@@ -160,6 +160,7 @@ func Login(ctx *gin.Context)  {
 	password := ctx.PostForm("password")
 	code := ctx.PostForm("code")
 
+	fmt.Println(telephone,password,code,"--")
 	// 数据验证
 	isReturn := isRight(telephone,password,ctx)
 	if !isReturn {
@@ -187,7 +188,12 @@ func Login(ctx *gin.Context)  {
 
 	// 判断验证码是否正确
 	session := sessions.Default(ctx)
+	if session.Get("captchaId")==nil{
+		ctx.String(http.StatusUnauthorized,"未获取到验证码信息")
+		return
+	}
 	captchaId := session.Get("captchaId").(string)
+	fmt.Println(captchaId,"captchaId")
 
 	verifyResult := util.VerfiyCaptcha(captchaId,code)
 	if !verifyResult{
