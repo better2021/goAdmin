@@ -16,7 +16,7 @@ func AuthMiddleware() gin.HandlerFunc{
 		fmt.Print(tokenString,"token")
 		// 验证token格式，token要Bearer 开头
 		if tokenString == "" || !strings.HasPrefix(tokenString,"Bearer "){
-			ctx.JSON(http.StatusUnauthorized,gin.H{"code":401,"msg":"没有权限哦"})
+			ctx.JSON(http.StatusUnauthorized,gin.H{"code":401,"msg":"token未携带或格式不对"})
 			ctx.Abort() // 中断请求
 			return
 		}
@@ -26,7 +26,7 @@ func AuthMiddleware() gin.HandlerFunc{
 		token,claims,err := common.ParseToken(tokenString)
 		if err != nil || !token.Valid{
 			fmt.Println(err,"err",token.Valid)
-			ctx.JSON(http.StatusUnauthorized,gin.H{"code":401,"msg":"没有权限呀"})
+			ctx.JSON(http.StatusUnauthorized,gin.H{"code":401,"msg":"token已过期，请重新登录"})
 			ctx.Abort()
 			return
 		}

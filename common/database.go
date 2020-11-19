@@ -2,18 +2,19 @@ package common
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/spf13/viper"
 	"goAdmin/model"
 	"net/url"
 	"os"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/spf13/viper"
 )
 
 var db *gorm.DB
 
 // 初始化数据库
-func InitDB() *gorm.DB{
+func InitDB() *gorm.DB {
 	InitConfig() // 获取数据库配置
 	driverName := viper.GetString("datasource.driverName")
 	host := viper.GetString("datasource.host")
@@ -35,21 +36,21 @@ func InitDB() *gorm.DB{
 		url.QueryEscape(loc),
 	)
 
-	db,err := gorm.Open(driverName,args)
-	fmt.Println(driverName,args,"---")
+	db, err := gorm.Open(driverName, args)
+	fmt.Println(driverName, args, "---")
 	if err != nil {
 		panic("faild to connect database,err" + err.Error())
-	}else {
+	} else {
 		fmt.Println("数据库连接成功")
 	}
-	db.AutoMigrate(&model.User{},&model.UserDto{},&model.Film{})
+	db.Set("gorm:table_options", "ENGINE=InnoDB  DEFAULT CHARSET=utf8;").AutoMigrate(&model.User{}, &model.UserDto{}, &model.Film{}, &model.Visit{})
 	return db
 }
 
 // 获取数据库初始化配置
-func InitConfig(){
+func InitConfig() {
 	// 获取当前的工作目录
-	workDir,_:= os.Getwd()
+	workDir, _ := os.Getwd()
 	fmt.Println("当前文件的路劲:" + workDir)
 	// 设置要读取的文件名
 	viper.SetConfigName("application")
@@ -59,7 +60,7 @@ func InitConfig(){
 	viper.AddConfigPath(workDir + "/config")
 	// 读取文件配置
 	err := viper.ReadInConfig()
-	if err !=nil{
-		fmt.Println(err,"---")
+	if err != nil {
+		fmt.Println(err, "---")
 	}
 }

@@ -191,8 +191,8 @@ func Login(ctx *gin.Context)  {
 
 	verifyResult := util.VerfiyCaptcha(captchaId,code)
 	if !verifyResult{
-		ctx.JSON(http.StatusUnauthorized,gin.H{
-			"code":http.StatusUnauthorized,
+		ctx.JSON(http.StatusBadRequest,gin.H{
+			"code":http.StatusBadRequest,
 			"msg":"验证码输入错误",
 		})
 		return
