@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"goAdmin/util"
@@ -17,8 +15,6 @@ import (
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
 // @Router /api/v1/getCode [get]
 func GenerateCaptchaHandler(ctx *gin.Context)  {
-	// 设置session
-	session := sessions.Default(ctx)
 	// 获取二维码配置
 	captchaConfig := util.GetCaptchaConfig()
 
@@ -30,14 +26,11 @@ func GenerateCaptchaHandler(ctx *gin.Context)  {
 
 	// 生成base64的png图片数据
 	base64Png := base64Captcha.CaptchaWriteToBase64Encoding(digitCap)
-	// 把 captchaId 储存到sessions
-	session.Set("captchaId",captchaId)
-	err := session.Save() // 保存session
-	if err != nil{
-		fmt.Println(err,"err")
-	}
 
 	ctx.JSON(http.StatusOK,gin.H{
-		"data":base64Png,
+		"data":gin.H{
+			"img":base64Png,
+			"captchaId":captchaId,
+		},
 	})
 }
