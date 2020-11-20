@@ -10,7 +10,7 @@ import (
 func CollectRouter(r *gin.Engine) *gin.Engine{
 	// 静态资源文件
 	r.StaticFS("/static",http.Dir("uploadFiles"))
-
+	r.GET("api/getCode",middleware.CorsMiddleware(),middleware.IPAuthMiddleWare(),controller.GenerateCaptchaHandler)
 	r.Use(middleware.CorsMiddleware(),middleware.AuthMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
 	v1 := r.Group("/api")
 	{
@@ -31,7 +31,6 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 		v1.PUT("/books/:id",controller.BookUpdate)
 		v1.DELETE("/books/:id",controller.BookDelete)
 
-		v1.GET("/getCode",controller.GenerateCaptchaHandler)
 		v1.POST("/upload",controller.UploadFile)
 	}
 
