@@ -47,12 +47,19 @@ func main() {
 		visit.VisitNum ++
 		db.Save(&visit)
 
+		ip := util.GetClientIp()
+		serverIp := util.GetServerIP()
+		RemoteIP := util.RemoteIP(c.Request)
+
 		c.JSON(http.StatusOK, gin.H{
 			"message": "hello golang",
 			"time":    time.Now().Format("2006-01-02 15:04:05"),
 			"week":    util.Getweek(),
 			"qrcode":  "http://" + host + "/static/qrcode.png",
 			"visitNum":visit.VisitNum,
+			"ip":ip,
+			"serverIp":serverIp,
+			"RemoteIP":RemoteIP,
 		})
 	})
 	port := viper.GetString("server.port")

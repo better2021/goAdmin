@@ -11,14 +11,14 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 	// 静态资源文件
 	r.StaticFS("/static",http.Dir("uploadFiles"))
 
-	r.Use(middleware.CorsMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
+	r.Use(middleware.CorsMiddleware(),middleware.AuthMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
 	v1 := r.Group("/api")
 	{
 		v1.GET("/users",controller.UserList)
 		v1.POST("/auth/register",controller.Register)
 		v1.PUT("/users/:id",controller.ChangePassword)
 		v1.POST("/auth/login",controller.Login)
-		v1.GET("/auth/info",middleware.AuthMiddleware(),controller.Info)
+		v1.GET("/auth/info",controller.Info)
 		v1.DELETE("/users/:id",controller.UserDelete)
 
 		v1.GET("/films",controller.FilmList)

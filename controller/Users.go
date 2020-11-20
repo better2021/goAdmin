@@ -274,15 +274,9 @@ func UserList(ctx *gin.Context){
 	var count int
 	db.Offset((pageNum-1)*pageSize).Limit(pageSize).Where("name LIKE?","%" + name + "%").Order("created_at desc").Find(&users).Count(&count)
 
-	ip := util.GetClientIp()
-	serverIp := util.GetServerIP()
-	RemoteIP := util.RemoteIP(ctx.Request)
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",
 		"data":users,
-		"ip":ip,
-		"serverIp":serverIp,
-		"RemoteIP":RemoteIP,
 		"attr":gin.H{
 			"page":pageNum,
 			"total":count,
