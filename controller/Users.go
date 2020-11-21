@@ -197,7 +197,7 @@ func Login(ctx *gin.Context)  {
 
 	verifyResult := util.VerfiyCaptcha(captchaId,code)
 	if !verifyResult{
-		ctx.JSON(http.StatusBadRequest,gin.H{
+		ctx.JSON(http.StatusOK,gin.H{
 			"code":http.StatusBadRequest,
 			"msg":"验证码输入错误",
 		})
@@ -260,8 +260,8 @@ func Info(ctx *gin.Context) {
 func UserList(ctx *gin.Context){
 	var users []model.User
 	name := ctx.Query("name")
-	pageNum,_ := strconv.Atoi(ctx.DefaultPostForm("pageNum","1"))
-	pageSize,_ := strconv.Atoi(ctx.DefaultPostForm("pageSize","10"))
+	pageNum,_ := strconv.Atoi(ctx.DefaultQuery("pageNum","1"))
+	pageSize,_ := strconv.Atoi(ctx.DefaultQuery("pageSize","10"))
 	fmt.Println(name,pageNum,pageSize,"--")
 
 	/*
@@ -272,7 +272,9 @@ func UserList(ctx *gin.Context){
 		总条数 Count(&count)
 	*/
 	var count int
-	db.Offset((pageNum-1)*pageSize).Limit(pageSize).Where("name LIKE?","%" + name + "%").Order("created_at desc").Find(&users).Count(&count)
+
+	db.Model(&users).Where("name LIKE?","%" + name + "%").Count(&count)
+	db.Where("name LIKE?","%" + name + "%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&users)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",

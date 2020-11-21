@@ -28,7 +28,8 @@ func FilmList(ctx *gin.Context) {
 	fmt.Println(name,pageNum,pageSize,"--")
 
 	var count int // 总数据条数
-	db.Where("name LIKE ?","%name%").Offset((pageNum-1)*pageSize).Order("id desc").Find(&films).Count(&count)
+	db.Model(&films).Where("name LIKE?","%name%").Count(&count)
+	db.Where("name LIKE?","%name%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",

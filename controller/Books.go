@@ -28,7 +28,8 @@ func BookList(ctx *gin.Context)  {
 	fmt.Println(title,"--")
 
 	var count int
-	db.Where("title LIKE ?","%title%").Offset((pageNum-1)*pageSize).Order("id desc").Find(&books).Count(&count)
+	db.Model(&books).Where("title LIKE?","%title%").Count(&count)
+	db.Where("title LIKE?","%title%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&books)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"msg":"请求成功",
