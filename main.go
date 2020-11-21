@@ -30,7 +30,6 @@ func main() {
 	defer db.Close()
 
 	r := gin.Default()
-	r = route.CollectRouter(r)
 
 	url := ginSwagger.URL("80/swagger.doc.json")
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
@@ -62,6 +61,8 @@ func main() {
 			"RemoteIP":RemoteIP,
 		})
 	})
+
+	r = route.CollectRouter(r)
 	port := viper.GetString("server.port")
 	if port != "" {
 		panic(r.Run(":" + port))

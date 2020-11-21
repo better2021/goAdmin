@@ -17,7 +17,7 @@ import (
 // @Param file query string true "file"
 // @Success 200 {string} json "{ "code": 200, "message": "上传成功" }"
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/upload [post]
+// @Router /api/upload [post]
 func UploadFile(ctx *gin.Context)  {
 	file,header,err := ctx.Request.FormFile("file")
 	filename := header.Filename

@@ -55,7 +55,7 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 // @Param password query string true "password"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/auth/register [post]
+// @Router /api/auth/register [post]
 func Register(ctx *gin.Context) {
 	var user = model.User{}
 	err := ctx.Bind(&user) // Bind绑定后传json格式
@@ -121,7 +121,7 @@ func Register(ctx *gin.Context) {
 // @Param id path string true "id"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
-// @Router /api/v1/users/{id} [put]
+// @Router /api/users/{id} [put]
 func ChangePassword(ctx *gin.Context){
 	id,_ := strconv.Atoi(ctx.Param("id"))
 
@@ -152,7 +152,7 @@ func ChangePassword(ctx *gin.Context){
 // @Param password query string true "password"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/auth/login [post]
+// @Router /api/auth/login [post]
 func Login(ctx *gin.Context)  {
 	// 获取参数
 	telephone := ctx.PostForm("telephone")
@@ -231,7 +231,7 @@ func Login(ctx *gin.Context)  {
 // @Param token query string true "token"
 // @Success 200 {object} model.UserDto
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/auth/info [get]
+// @Router /api/auth/info [get]
 func Info(ctx *gin.Context) {
 	user,_ := ctx.Get("user")
 	fmt.Println(user,"user")
@@ -256,7 +256,7 @@ func Info(ctx *gin.Context) {
 // @Param pageSize query string true "pageSize"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/users [get]
+// @Router /api/users [get]
 func UserList(ctx *gin.Context){
 	var users []model.User
 	name := ctx.Query("name")
@@ -291,7 +291,7 @@ func UserList(ctx *gin.Context){
 // @Param id query string true "id"
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/users/{id} [delete]
+// @Router /api/users/{id} [delete]
 func UserDelete(ctx *gin.Context) {
 	id,err := strconv.Atoi(ctx.Param("id"))
 	if err != nil{

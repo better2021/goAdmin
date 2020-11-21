@@ -18,7 +18,7 @@ import (
 // @Param pageSize query string true "pageSize"
 // @Success 200 {object} model.Book
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/books [get]
+// @Router /api/books [get]
 func BookList(ctx *gin.Context)  {
 	var books []model.Book
 
@@ -51,7 +51,7 @@ func BookList(ctx *gin.Context)  {
 // @Param desc query string false "desc"
 // @Success 200 {object} model.Book
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/books [post]
+// @Router /api/books [post]
 func BookCreate(ctx *gin.Context){
 	var data = &model.Book{}
 	err := ctx.Bind(data)
@@ -76,7 +76,7 @@ func BookCreate(ctx *gin.Context){
 // @Param id path string true "id"
 // @Success 200 {object} model.Book
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
-// @Router /api/v1/books/{id} [put]
+// @Router /api/books/{id} [put]
 func BookUpdate(ctx *gin.Context) {
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")
@@ -103,7 +103,7 @@ func BookUpdate(ctx *gin.Context) {
 // @Param id path string true "id"
 // @Success 200 {object} model.Book
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
-// @Router /api/v1/books/{id} [delete]
+// @Router /api/books/{id} [delete]
 func BookDelete(ctx *gin.Context) {
 	id,_ := strconv.Atoi(ctx.Param("id"))
 	fmt.Println(id,"--")
