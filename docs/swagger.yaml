@@ -97,7 +97,7 @@ info:
   title: Golang Gin API
   version: "2.0"
 paths:
-  /api/v1/auth/info:
+  /api/auth/info:
     get:
       consumes:
       - application/json
@@ -130,7 +130,7 @@ paths:
       summary: 单个用户信息
       tags:
       - 用户
-  /api/v1/auth/login:
+  /api/auth/login:
     post:
       consumes:
       - application/json
@@ -160,7 +160,7 @@ paths:
       summary: 用户登陆
       tags:
       - 用户
-  /api/v1/auth/register:
+  /api/auth/register:
     post:
       consumes:
       - application/json
@@ -195,7 +195,7 @@ paths:
       summary: 用户注册
       tags:
       - 用户
-  /api/v1/books:
+  /api/books:
     get:
       consumes:
       - application/json
@@ -264,7 +264,7 @@ paths:
       summary: 创建书籍列表
       tags:
       - 书籍
-  /api/v1/books/{id}:
+  /api/books/{id}:
     delete:
       consumes:
       - application/json
@@ -313,7 +313,7 @@ paths:
       summary: 更新书籍列表
       tags:
       - 书籍
-  /api/v1/films:
+  /api/films:
     get:
       consumes:
       - application/json
@@ -386,7 +386,7 @@ paths:
       summary: 创建电影列表
       tags:
       - 电影
-  /api/v1/films/{id}:
+  /api/films/{id}:
     delete:
       consumes:
       - application/json
@@ -435,7 +435,7 @@ paths:
       summary: 更新电影列表
       tags:
       - 电影
-  /api/v1/getCode:
+  /api/getCode:
     get:
       consumes:
       - application/json
@@ -450,7 +450,7 @@ paths:
       summary: 获取验证码
       tags:
       - 验证码
-  /api/v1/upload:
+  /api/upload:
     post:
       consumes:
       - multipart/form-data
@@ -475,7 +475,7 @@ paths:
       summary: 文件上传
       tags:
       - 文件上传
-  /api/v1/users:
+  /api/users:
     get:
       consumes:
       - application/json
@@ -513,7 +513,7 @@ paths:
       summary: 获取用户列表
       tags:
       - 用户
-  /api/v1/users/{id}:
+  /api/users/{id}:
     delete:
       consumes:
       - application/json

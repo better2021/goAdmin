@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
-// @Router /api/v1/getCode [get]
+// @Router /api/getCode [get]
 func GenerateCaptchaHandler(ctx *gin.Context)  {
 	// 获取二维码配置
 	captchaConfig := util.GetCaptchaConfig()

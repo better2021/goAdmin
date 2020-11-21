@@ -28,7 +28,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/info": {
+        "/api/auth/info": {
             "get": {
                 "description": "用户信息",
                 "consumes": [
@@ -78,7 +78,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/auth/login": {
+        "/api/auth/login": {
             "post": {
                 "description": "用户登陆",
                 "consumes": [
@@ -123,7 +123,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/auth/register": {
+        "/api/auth/register": {
             "post": {
                 "description": "用户注册",
                 "consumes": [
@@ -175,7 +175,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/books": {
+        "/api/books": {
             "get": {
                 "description": "书籍列表",
                 "consumes": [
@@ -279,7 +279,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/books/{id}": {
+        "/api/books/{id}": {
             "put": {
                 "description": "书籍列表",
                 "consumes": [
@@ -353,7 +353,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/films": {
+        "/api/films": {
             "get": {
                 "description": "电影列表",
                 "consumes": [
@@ -463,7 +463,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/films/{id}": {
+        "/api/films/{id}": {
             "put": {
                 "description": "电影列表",
                 "consumes": [
@@ -537,7 +537,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/getCode": {
+        "/api/getCode": {
             "get": {
                 "description": "获取验证码",
                 "consumes": [
@@ -560,7 +560,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/upload": {
+        "/api/upload": {
             "post": {
                 "description": "文件上传",
                 "consumes": [
@@ -598,7 +598,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/users": {
+        "/api/users": {
             "get": {
                 "description": "用户列表",
                 "consumes": [
@@ -655,7 +655,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/users/{id}": {
+        "/api/users/{id}": {
             "put": {
                 "description": "用户信息",
                 "consumes": [
