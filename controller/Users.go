@@ -61,6 +61,7 @@ func Register(ctx *gin.Context) {
 	err := ctx.Bind(&user) // Bind绑定后传json格式
 	if err != nil{
 		ctx.JSON(http.StatusOK,gin.H{
+			"code":http.StatusOK,
 			"msg":err.Error(),
 		})
 		return
@@ -98,6 +99,7 @@ func Register(ctx *gin.Context) {
 	hasedPassword,err := bcrypt.GenerateFromPassword([]byte(password),bcrypt.DefaultCost)
 	if err != nil{
 		ctx.JSON(http.StatusInternalServerError,gin.H{
+			"code":http.StatusInternalServerError,
 			"msg":"加密发送错误",
 		})
 	}
@@ -110,7 +112,7 @@ func Register(ctx *gin.Context) {
 	db.Create(&newUser)
 
 	// 返回结果
-	ctx.JSON(http.StatusOK,gin.H{"msg":"注册成功"})
+	ctx.JSON(http.StatusOK,gin.H{"code":http.StatusOK,"msg":"注册成功"})
 }
 
 // @Summary 更新用户信息
@@ -126,18 +128,19 @@ func ChangePassword(ctx *gin.Context){
 	id,_ := strconv.Atoi(ctx.Param("id"))
 
 	data := &model.User{}
-	hasedPassword,_ := bcrypt.GenerateFromPassword([]byte(data.Password),bcrypt.DefaultCost)
-	fmt.Println(string(hasedPassword),"-***-")
-
 	err := ctx.Bind(data)
-	data.Password = string(hasedPassword)
 	if err != nil{
 		fmt.Println(err)
 		return
 	}
+	hasedPassword,_ := bcrypt.GenerateFromPassword([]byte(data.Password),bcrypt.DefaultCost)
+	fmt.Println(string(hasedPassword),"-***-")
+
+	data.Password = string(hasedPassword)
 
 	db.Model(data).Where("id=?",id).Update(data)
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"更新成功",
 		"data":data,
 	})
@@ -171,7 +174,7 @@ func Login(ctx *gin.Context)  {
 	var user model.User
 	db.Where("telephone=?",telephone).First(&user)
 	if user.ID == 0{
-		ctx.JSON(http.StatusUnprocessableEntity,gin.H{"msg":"用户不存在"})
+		ctx.JSON(http.StatusOK,gin.H{"code":http.StatusBadRequest,"msg":"用户不存在"})
 		return
 	}
 
@@ -182,14 +185,14 @@ func Login(ctx *gin.Context)  {
 	fmt.Println(user.Password,"password")
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(password));err!=nil{
 		fmt.Println(err)
-		ctx.JSON(http.StatusBadRequest,gin.H{"msg":"密码错误"})
+		ctx.JSON(http.StatusOK,gin.H{"code":http.StatusBadRequest,"msg":"密码错误"})
 		return
 	}
 
 	// 判断验证码是否正确
 	if captchaId == ""{
-		ctx.JSON(http.StatusUnauthorized,gin.H{
-			"code":http.StatusUnauthorized,
+		ctx.JSON(http.StatusOK,gin.H{
+			"code":http.StatusUnprocessableEntity,
 			"msg":"captchaId参数是必传",
 		})
 		return
@@ -198,7 +201,7 @@ func Login(ctx *gin.Context)  {
 	verifyResult := util.VerfiyCaptcha(captchaId,code)
 	if !verifyResult{
 		ctx.JSON(http.StatusOK,gin.H{
-			"code":http.StatusBadRequest,
+			"code":http.StatusUnprocessableEntity,
 			"msg":"验证码输入错误",
 		})
 		return
@@ -208,6 +211,7 @@ func Login(ctx *gin.Context)  {
 	token,err := common.ReleaseToken(user)
 	if err != nil{
 		ctx.JSON(http.StatusInternalServerError,gin.H{
+			"code":http.StatusInternalServerError,
 			"msg":"系统异常",
 		})
 		fmt.Println(err)
@@ -216,6 +220,7 @@ func Login(ctx *gin.Context)  {
 
 	// 返回结果
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP},
 		"msg":"登录成功",
 	})
@@ -277,6 +282,7 @@ func UserList(ctx *gin.Context){
 	db.Where("name LIKE?","%" + name + "%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&users)
 
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"请求成功",
 		"data":users,
 		"attr":gin.H{
@@ -313,6 +319,7 @@ func UserDelete(ctx *gin.Context) {
 	fmt.Println(id,"--")
 	db.Where("id=?",id).Delete(model.User{})
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"删除成功",
 	})
 }

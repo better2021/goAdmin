@@ -29,6 +29,7 @@ func GenerateCaptchaHandler(ctx *gin.Context)  {
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"data":gin.H{
+			"code":http.StatusOK,
 			"img":base64Png,
 			"captchaId":captchaId,
 		},

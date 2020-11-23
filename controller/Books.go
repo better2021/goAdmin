@@ -32,6 +32,7 @@ func BookList(ctx *gin.Context)  {
 	db.Where("title LIKE?","%title%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&books)
 
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"请求成功",
 		"data":books,
 		"attr":gin.H{
@@ -64,6 +65,7 @@ func BookCreate(ctx *gin.Context){
 	fmt.Println(data,"--")
 	db.Create(data)
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"创建成功",
 		"data":data,
 	})
@@ -91,6 +93,7 @@ func BookUpdate(ctx *gin.Context) {
 
 	db.Model(data).Where("id=?",id).Update(data)
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"更新成功",
 		"data":data,
 	})
@@ -111,6 +114,7 @@ func BookDelete(ctx *gin.Context) {
 
 	db.Where("id=?",id).Delete(&model.Book{})
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"删除成功",
 		"id":id,
 	})

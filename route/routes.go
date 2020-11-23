@@ -40,8 +40,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound,gin.H{
 			"code":http.StatusNotFound,
-			"msg-zh":"路由地址错误或请求方法错误",
-			"msg-en":"Not router or Method",
+			"msg":"路由地址错误或请求方法错误",
 		})
 	})
 

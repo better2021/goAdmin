@@ -28,10 +28,11 @@ func FilmList(ctx *gin.Context) {
 	fmt.Println(name,pageNum,pageSize,"--")
 
 	var count int // 总数据条数
-	db.Model(&films).Where("name LIKE?","%name%").Count(&count)
-	db.Where("name LIKE?","%name%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
+	db.Model(&films).Where("name LIKE?","%" + name + "%").Count(&count)
+	db.Where("name LIKE?","%" + name + "%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
 
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"请求成功",
 		"data":films,
 		"attr":gin.H{
@@ -65,6 +66,7 @@ func FilmCreate(ctx *gin.Context) {
 	fmt.Println(data,"--")
 	db.Create(data)
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"创建成功",
 		"data":data,
 	})
@@ -92,6 +94,7 @@ func FilmUpdate(ctx *gin.Context) {
 
 	db.Model(data).Where("id=?",id).Update(data)
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"更新成功",
 		"data":data,
 	})
@@ -112,6 +115,7 @@ func FilmDelete(ctx *gin.Context)  {
 
 	db.Where("id=?",id).Delete(model.Film{})
 	ctx.JSON(http.StatusOK,gin.H{
+		"code":http.StatusOK,
 		"msg":"删除成功",
 		"id":id,
 	})
