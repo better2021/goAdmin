@@ -13,12 +13,12 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 	r.Use(middleware.CorsMiddleware(),middleware.IPAuthMiddleWare())
 	r.GET("/api/getCode",controller.GenerateCaptchaHandler)
 	r.POST("/api/auth/login",controller.Login)
+	r.POST("/api/auth/register",controller.Register)
 
 	r.Use(middleware.CorsMiddleware(),middleware.AuthMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
 	v1 := r.Group("/api")
 	{
 		v1.GET("/users",controller.UserList)
-		v1.POST("/auth/register",controller.Register)
 		v1.PUT("/users/:id",controller.ChangePassword)
 		v1.GET("/auth/info",controller.Info)
 		v1.DELETE("/users/:id",controller.UserDelete)

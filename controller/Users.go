@@ -60,8 +60,8 @@ func Register(ctx *gin.Context) {
 	var user = model.User{}
 	err := ctx.Bind(&user) // Bind绑定后传json格式
 	if err != nil{
-		ctx.JSON(http.StatusOK,gin.H{
-			"code":http.StatusOK,
+		ctx.JSON(http.StatusInternalServerError,gin.H{
+			"code":http.StatusInternalServerError,
 			"msg":err.Error(),
 		})
 		return
@@ -88,8 +88,8 @@ func Register(ctx *gin.Context) {
 
 	// 判断手机号是否存在
 	if isTelephoneExis(db,telephone){
-		ctx.JSON(http.StatusUnprocessableEntity,gin.H{
-			"code":424,
+		ctx.JSON(http.StatusOK,gin.H{
+			"code":http.StatusUnprocessableEntity,
 			"msg":"用户已存在",
 		})
 		return
@@ -98,7 +98,7 @@ func Register(ctx *gin.Context) {
 	// 用户不存在就创建用户
 	hasedPassword,err := bcrypt.GenerateFromPassword([]byte(password),bcrypt.DefaultCost)
 	if err != nil{
-		ctx.JSON(http.StatusInternalServerError,gin.H{
+		ctx.JSON(http.StatusOK,gin.H{
 			"code":http.StatusInternalServerError,
 			"msg":"加密发送错误",
 		})
