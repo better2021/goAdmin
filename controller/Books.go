@@ -23,13 +23,14 @@ func BookList(ctx *gin.Context)  {
 	var books []model.Book
 
 	title := ctx.Query("title")
-	pageNum,_ := strconv.Atoi(ctx.DefaultPostForm("pageNum","1"))
-	pageSize,_ := strconv.Atoi(ctx.DefaultPostForm("pageSize","10"))
+	userId,_ := strconv.Atoi(ctx.Query("userId"))
+	pageNum,_ := strconv.Atoi(ctx.DefaultQuery("pageNum","1"))
+	pageSize,_ := strconv.Atoi(ctx.DefaultQuery("pageSize","10"))
 	fmt.Println(title,"--")
 
 	var count int
-	db.Model(&books).Where("title LIKE?","%title%").Count(&count)
-	db.Where("title LIKE?","%title%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&books)
+	db.Model(&books).Where("title LIKE ? AND user_id = ?","%" + title + "%",userId).Count(&count)
+	db.Where("title LIKE ? AND user_id = ?","%" + title + "%",userId).Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&books)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"code":http.StatusOK,

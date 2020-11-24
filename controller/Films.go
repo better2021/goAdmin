@@ -23,13 +23,14 @@ func FilmList(ctx *gin.Context) {
 	var films []model.Film
 
 	name := ctx.Query("name")
-	pageNum,_ := strconv.Atoi(ctx.DefaultPostForm("pageNum","1"))
-	pageSize,_ := strconv.Atoi(ctx.DefaultPostForm("pageSize","10"))
-	fmt.Println(name,pageNum,pageSize,"--")
+	userId,_ := strconv.Atoi(ctx.Query("userId"))
+	pageNum,_ := strconv.Atoi(ctx.DefaultQuery("pageNum","1"))
+	pageSize,_ := strconv.Atoi(ctx.DefaultQuery("pageSize","10"))
+	fmt.Println(name,pageNum,pageSize,userId,"--")
 
 	var count int // 总数据条数
-	db.Model(&films).Where("name LIKE?","%" + name + "%").Count(&count)
-	db.Where("name LIKE?","%" + name + "%").Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
+	db.Model(&films).Where("name LIKE ? AND user_id = ?","%" + name + "%",userId).Count(&count)
+	db.Where("name LIKE ? AND user_id = ?","%" + name + "%",userId).Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"code":http.StatusOK,

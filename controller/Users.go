@@ -221,7 +221,7 @@ func Login(ctx *gin.Context)  {
 	// 返回结果
 	ctx.JSON(http.StatusOK,gin.H{
 		"code":http.StatusOK,
-		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP},
+		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP,"userId":user.ID},
 		"msg":"登录成功",
 	})
 }

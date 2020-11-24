@@ -7,4 +7,5 @@ type Film struct{
 	Address string  `json:"address" example:"出品地区"`
 	Actor   string  `json:"actor" example:"演员"`
 	Desc    string  `json:"desc" example:"描述"`
+	UserId  uint  `json:"userId" example:"用户id"`
 }
