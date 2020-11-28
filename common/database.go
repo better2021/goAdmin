@@ -45,7 +45,7 @@ func InitDB() *gorm.DB {
 	}
 
 	db.Set("gorm:table_options", "ENGINE=InnoDB  DEFAULT CHARSET=utf8;")
-	db.AutoMigrate(&model.User{},&model.UserDto{},&model.Film{},&model.Visit{})
+	db.AutoMigrate(&model.User{},&model.UserDto{},&model.Film{},&model.Book{},&model.Visit{})
 	return db
 }
 
