@@ -19,7 +19,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 	v1 := r.Group("/api")
 	{
 		v1.GET("/users",controller.UserList)
-		v1.PUT("/users/:id",controller.ChangePassword)
+		v1.PUT("/users/:id",controller.UserUpdate)
 		v1.GET("/auth/info",controller.Info)
 		v1.DELETE("/users/:id",controller.UserDelete)
 

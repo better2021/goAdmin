@@ -124,7 +124,7 @@ func Register(ctx *gin.Context) {
 // @Success 200 {object} model.User
 // @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
 // @Router /api/users/{id} [put]
-func ChangePassword(ctx *gin.Context){
+func UserUpdate(ctx *gin.Context){
 	id,_ := strconv.Atoi(ctx.Param("id"))
 
 	data := &model.User{}
@@ -221,7 +221,7 @@ func Login(ctx *gin.Context)  {
 	// 返回结果
 	ctx.JSON(http.StatusOK,gin.H{
 		"code":http.StatusOK,
-		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP,"userId":user.ID},
+		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP,"userId":user.ID,"imgUrl":user.ImgUrl},
 		"msg":"登录成功",
 	})
 }

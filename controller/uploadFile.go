@@ -42,11 +42,18 @@ func UploadFile(ctx *gin.Context)  {
 		fmt.Println(err)
 	}
 
+	var protocol string
+	if ctx.Request.Proto== "HTTP/1.1" {
+		protocol = "http://"
+	}else {
+		protocol = "https://"
+	}
+
 	// time.Now().Format("2006-01-02 15:04:05") 格式化时间
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":http.StatusOK,
 		"message":    "上传成功",
-		"imgUrl":     dir + "/uploadFiles/" + filename,
+		"imgUrl":     protocol + ctx.Request.Host + "/static/" + filename,
 		"createTime": time.Now().Format("2006-01-02 15:04:05"),
 	})
 }
