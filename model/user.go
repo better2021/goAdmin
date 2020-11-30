@@ -1,9 +1,9 @@
 package model
 
 type BasicModel struct {
-	ID        uint `json:"id,omitempty" gorm:"primary_key"`
-	CreatedAt Time `json:"createAt" gorm:"datetime" example:"创建时间"`
-	UpdatedAt Time `json:"updateAt" gorm:"datetime" example:"更新时间"`
+	ID        uint     `json:"id,omitempty" gorm:"primary_key"`
+	CreatedAt JSONTime `json:"createAt" gorm:"datetime" example:"创建时间"`
+	UpdatedAt JSONTime `json:"updateAt" gorm:"datetime" example:"更新时间"`
 }
 
 type User struct {
@@ -13,15 +13,15 @@ type User struct {
 	Password  string `json:"password" gorm:"size:255;not null" example:"密码"` // 字段不暴露给用户，则使用 `json:"-"` 修饰
 	Desc      string `json:"desc" gorm:"varchar(225)"`
 	IP        string `json:"ip" gorm:"varchar(20)"`
-	ImgUrl	  string 	`json:"imgUrl" gorm:"varchar(100)"`
+	ImgUrl    string `json:"imgUrl" gorm:"varchar(100)"`
 }
 
 type UserDto struct {
-	CreatedAt Time   `json:"createAt" example:"创建时间"`
-	UpdatedAt Time   `json:"updateAt" example:"更新时间"`
-	Name      string `json:"name"`
-	Telephone string `json:"telephone"`
-	Desc      string `json:"desc" gorm:"varchar(225)"`
+	CreatedAt JSONTime `json:"createAt" example:"创建时间"`
+	UpdatedAt JSONTime `json:"updateAt" example:"更新时间"`
+	Name      string   `json:"name"`
+	Telephone string   `json:"telephone"`
+	Desc      string   `json:"desc" gorm:"varchar(225)"`
 }
 
 func ToUserDto(user User) UserDto {

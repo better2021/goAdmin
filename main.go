@@ -42,8 +42,8 @@ func main() {
 		}
 
 		var visit model.Visit
-		db.Find(&visit)  // 等价于 	db.Raw("SELECT * FROM visits").Scan(&visit)
-		visit.VisitNum ++
+		db.Find(&visit) // 等价于 	db.Raw("SELECT * FROM visits").Scan(&visit)
+		visit.VisitNum++
 		db.Save(&visit)
 
 		ip := util.GetClientIp()
@@ -51,14 +51,14 @@ func main() {
 		RemoteIP := util.RemoteIP(c.Request)
 
 		c.JSON(http.StatusOK, gin.H{
-			"message": "hello golang",
-			"time":    time.Now().Format("2006-01-02 15:04:05"),
-			"week":    util.Getweek(),
-			"qrcode":  "http://" + host + "/static/qrcode.png",
-			"visitNum":visit.VisitNum,
-			"ip":ip,
-			"serverIp":serverIp,
-			"RemoteIP":RemoteIP,
+			"message":  "hello golang",
+			"time":     time.Now().Format("2006-01-02 15:04:05"),
+			"week":     util.Getweek(),
+			"qrcode":   "http://" + host + "/static/qrcode.png",
+			"visitNum": visit.VisitNum,
+			"ip":       ip,
+			"serverIp": serverIp,
+			"RemoteIP": RemoteIP,
 		})
 	})
 

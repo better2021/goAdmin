@@ -33,6 +33,11 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 		v1.PUT("/books/:id",controller.BookUpdate)
 		v1.DELETE("/books/:id",controller.BookDelete)
 
+		v1.GET("/musics",controller.MusicList)
+		v1.POST("/musics",controller.MusicCreate)
+		v1.PUT("/musics/:id",controller.MusicUpdate)
+		v1.DELETE("/musics/:id",controller.MusicDelete)
+
 		v1.POST("/upload",controller.UploadFile)
 	}
 
