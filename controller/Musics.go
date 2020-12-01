@@ -17,7 +17,7 @@ import (
 // @Param pageNum query string true "pageNum"
 // @Param pageSize query string true "pageSize"
 // @Success 200 {object} model.Music
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/musics [get]
 func MusicList(ctx *gin.Context){
 	var musics []model.Music
@@ -53,7 +53,7 @@ func MusicList(ctx *gin.Context){
 // @Param actor query string false "author"
 // @Param desc query string false "desc"
 // @Success 200 {object} model.Music
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/musics [post]
 func MusicCreate(ctx *gin.Context){
 	var data = &model.Music{}
@@ -78,7 +78,7 @@ func MusicCreate(ctx *gin.Context){
 // @Produce json
 // @Param id path string true "id"
 // @Success 200 {object} model.Music
-// @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "id必传" }"
 // @Router /api/musics/{id} [put]
 func MusicUpdate(ctx *gin.Context) {
 	id,_ := strconv.Atoi(ctx.Param("id"))
@@ -106,7 +106,7 @@ func MusicUpdate(ctx *gin.Context) {
 // @Produce json
 // @Param id path string true "id"
 // @Success 200 {object} model.Music
-// @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "id必传" }"
 // @Router /api/musics/{id} [delete]
 func MusicDelete(ctx *gin.Context) {
 	id,_ := strconv.Atoi(ctx.Param("id"))

@@ -54,7 +54,7 @@ func isRight(telephone string,password string,ctx *gin.Context) bool {
 // @Param telephone query string true "telephone"
 // @Param password query string true "password"
 // @Success 200 {object} model.User
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/auth/register [post]
 func Register(ctx *gin.Context) {
 	var user = model.User{}
@@ -122,7 +122,7 @@ func Register(ctx *gin.Context) {
 // @Produce json
 // @Param id path string true "id"
 // @Success 200 {object} model.User
-// @Failure 400 {string} json "{ "code": 400, "message": "id必传" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "id必传" }"
 // @Router /api/users/{id} [put]
 func UserUpdate(ctx *gin.Context){
 	id,_ := strconv.Atoi(ctx.Param("id"))
@@ -154,7 +154,7 @@ func UserUpdate(ctx *gin.Context){
 // @Param telephone query string true "telephone"
 // @Param password query string true "password"
 // @Success 200 {object} model.User
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/auth/login [post]
 func Login(ctx *gin.Context)  {
 	// 获取参数
@@ -235,7 +235,7 @@ func Login(ctx *gin.Context)  {
 // @Param telephone query string false "telephone"
 // @Param token query string true "token"
 // @Success 200 {object} model.UserDto
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/auth/info [get]
 func Info(ctx *gin.Context) {
 	user,_ := ctx.Get("user")
@@ -260,7 +260,7 @@ func Info(ctx *gin.Context) {
 // @Param pageNum query string true "pageNum"
 // @Param pageSize query string true "pageSize"
 // @Success 200 {object} model.User
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/users [get]
 func UserList(ctx *gin.Context){
 	var users []model.User
@@ -298,7 +298,7 @@ func UserList(ctx *gin.Context){
 // @Produce json
 // @Param id query string true "id"
 // @Success 200 {object} model.User
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/users/{id} [delete]
 func UserDelete(ctx *gin.Context) {
 	id,err := strconv.Atoi(ctx.Param("id"))

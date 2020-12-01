@@ -12,7 +12,7 @@ import (
 // @Tags 验证码
 // @Accept json
 // @Produce json
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/getCode [get]
 func GenerateCaptchaHandler(ctx *gin.Context)  {
 	// 获取二维码配置

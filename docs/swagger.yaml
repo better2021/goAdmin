@@ -4,9 +4,6 @@ definitions:
       author:
         example: 作者
         type: string
-      createAt:
-        example: 创建时间
-        type: string
       desc:
         example: 描述
         type: string
@@ -14,9 +11,6 @@ definitions:
         type: integer
       title:
         example: 书籍名称
-        type: string
-      updateAt:
-        example: 更新时间
         type: string
       year:
         example: 年份
@@ -30,9 +24,6 @@ definitions:
       address:
         example: 出品地区
         type: string
-      createAt:
-        example: 创建时间
-        type: string
       desc:
         example: 描述
         type: string
@@ -41,8 +32,22 @@ definitions:
       name:
         example: 电影名称
         type: string
-      updateAt:
-        example: 更新时间
+      year:
+        example: 年份
+        type: string
+    type: object
+  model.Music:
+    properties:
+      actor:
+        example: 作曲
+        type: string
+      desc:
+        example: 描述
+        type: string
+      id:
+        type: integer
+      title:
+        example: 歌曲名称
         type: string
       year:
         example: 年份
@@ -50,13 +55,12 @@ definitions:
     type: object
   model.User:
     properties:
-      createAt:
-        example: 创建时间
-        type: string
       desc:
         type: string
       id:
         type: integer
+      imgUrl:
+        type: string
       ip:
         type: string
       name:
@@ -69,23 +73,14 @@ definitions:
       telephone:
         example: 手机号码
         type: string
-      updateAt:
-        example: 更新时间
-        type: string
     type: object
   model.UserDto:
     properties:
-      createAt:
-        example: 创建时间
-        type: string
       desc:
         type: string
       name:
         type: string
       telephone:
-        type: string
-      updateAt:
-        example: 更新时间
         type: string
     type: object
 info:
@@ -450,6 +445,124 @@ paths:
       summary: 获取验证码
       tags:
       - 验证码
+  /api/musics:
+    get:
+      consumes:
+      - application/json
+      description: 音乐列表
+      parameters:
+      - description: title
+        in: query
+        name: title
+        type: string
+      - description: pageNum
+        in: query
+        name: pageNum
+        required: true
+        type: string
+      - description: pageSize
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Music'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 获取音乐列表
+      tags:
+      - 音乐
+    post:
+      consumes:
+      - application/json
+      description: 创建音乐
+      parameters:
+      - description: title
+        in: query
+        name: title
+        type: string
+      - description: year
+        in: query
+        name: year
+        type: string
+      - description: author
+        in: query
+        name: actor
+        type: string
+      - description: desc
+        in: query
+        name: desc
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Music'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 创建音乐列表
+      tags:
+      - 音乐
+  /api/musics/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 音乐列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Music'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 删除音乐列表
+      tags:
+      - 音乐
+    put:
+      consumes:
+      - application/json
+      description: 音乐列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Music'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 更新音乐列表
+      tags:
+      - 音乐
   /api/upload:
     post:
       consumes:

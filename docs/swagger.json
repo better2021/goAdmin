@@ -543,6 +543,184 @@
                 }
             }
         },
+        "/api/musics": {
+            "get": {
+                "description": "音乐列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "音乐"
+                ],
+                "summary": "获取音乐列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pageNum",
+                        "name": "pageNum",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "pageSize",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Music"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "创建音乐",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "音乐"
+                ],
+                "summary": "创建音乐列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "title",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "year",
+                        "name": "year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "author",
+                        "name": "actor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "desc",
+                        "name": "desc",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Music"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/musics/{id}": {
+            "put": {
+                "description": "音乐列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "音乐"
+                ],
+                "summary": "更新音乐列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Music"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "音乐列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "音乐"
+                ],
+                "summary": "删除音乐列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Music"
+                        }
+                    },
+                    "400": {
+                        "description": "{ \"code\": 400, \"message\": \"id必传\" }",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/upload": {
             "post": {
                 "description": "文件上传",
@@ -720,10 +898,6 @@
                     "type": "string",
                     "example": "作者"
                 },
-                "createAt": {
-                    "type": "string",
-                    "example": "创建时间"
-                },
                 "desc": {
                     "type": "string",
                     "example": "描述"
@@ -734,10 +908,6 @@
                 "title": {
                     "type": "string",
                     "example": "书籍名称"
-                },
-                "updateAt": {
-                    "type": "string",
-                    "example": "更新时间"
                 },
                 "year": {
                     "type": "string",
@@ -756,10 +926,6 @@
                     "type": "string",
                     "example": "出品地区"
                 },
-                "createAt": {
-                    "type": "string",
-                    "example": "创建时间"
-                },
                 "desc": {
                     "type": "string",
                     "example": "描述"
@@ -771,9 +937,29 @@
                     "type": "string",
                     "example": "电影名称"
                 },
-                "updateAt": {
+                "year": {
                     "type": "string",
-                    "example": "更新时间"
+                    "example": "年份"
+                }
+            }
+        },
+        "model.Music": {
+            "type": "object",
+            "properties": {
+                "actor": {
+                    "type": "string",
+                    "example": "作曲"
+                },
+                "desc": {
+                    "type": "string",
+                    "example": "描述"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "歌曲名称"
                 },
                 "year": {
                     "type": "string",
@@ -784,15 +970,14 @@
         "model.User": {
             "type": "object",
             "properties": {
-                "createAt": {
-                    "type": "string",
-                    "example": "创建时间"
-                },
                 "desc": {
                     "type": "string"
                 },
                 "id": {
                     "type": "integer"
+                },
+                "imgUrl": {
+                    "type": "string"
                 },
                 "ip": {
                     "type": "string"
@@ -809,20 +994,12 @@
                 "telephone": {
                     "type": "string",
                     "example": "手机号码"
-                },
-                "updateAt": {
-                    "type": "string",
-                    "example": "更新时间"
                 }
             }
         },
         "model.UserDto": {
             "type": "object",
             "properties": {
-                "createAt": {
-                    "type": "string",
-                    "example": "创建时间"
-                },
                 "desc": {
                     "type": "string"
                 },
@@ -831,10 +1008,6 @@
                 },
                 "telephone": {
                     "type": "string"
-                },
-                "updateAt": {
-                    "type": "string",
-                    "example": "更新时间"
                 }
             }
         }

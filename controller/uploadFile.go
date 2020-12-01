@@ -15,8 +15,8 @@ import (
 // @Accept multipart/form-data
 // @Produce json
 // @Param file query string true "file"
-// @Success 200 {string} json "{ "code": 200, "message": "上传成功" }"
-// @Failure 400 {string} json "{ "code": 400, "message": "请求失败" }"
+// @Success 200 {string} string "{ "code": 200, "message": "上传成功" }"
+// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/upload [post]
 func UploadFile(ctx *gin.Context)  {
 	file,header,err := ctx.Request.FormFile("file")
