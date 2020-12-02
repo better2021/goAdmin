@@ -28,16 +28,16 @@ func isTelephoneExis(db *gorm.DB,telephone string) bool{
 // 判断手机号和密码的长度是否正确
 func isRight(telephone string,password string,ctx *gin.Context) bool {
 	if len(telephone) != 11{
-		ctx.JSON(http.StatusUnprocessableEntity,gin.H{
-			"code":422,
+		ctx.JSON(http.StatusOK,gin.H{
+			"code":http.StatusUnprocessableEntity,
 			"msg":"手机号必须为11位",
 		})
 		return false
 	}
 
 	if len(password) < 6{
-		ctx.JSON(http.StatusUnprocessableEntity,gin.H{
-			"code":423,
+		ctx.JSON(http.StatusOK,gin.H{
+			"code":http.StatusUnprocessableEntity,
 			"msg":"密码不能少于6位",
 		})
 		return false
@@ -221,7 +221,14 @@ func Login(ctx *gin.Context)  {
 	// 返回结果
 	ctx.JSON(http.StatusOK,gin.H{
 		"code":http.StatusOK,
-		"data":gin.H{"token":token,"name":user.Name,"ip":user.IP,"userId":user.ID,"imgUrl":user.ImgUrl},
+		"data":gin.H{
+			"token":token,
+			"name":user.Name,
+			"ip":user.IP,
+			"userId":user.ID,
+			"imgUrl":user.ImgUrl,
+			"themeColor":user.ThemeColor,
+		},
 		"msg":"登录成功",
 	})
 }
@@ -267,7 +274,7 @@ func UserList(ctx *gin.Context){
 	name := ctx.Query("name")
 	pageNum,_ := strconv.Atoi(ctx.DefaultQuery("pageNum","1"))
 	pageSize,_ := strconv.Atoi(ctx.DefaultQuery("pageSize","10"))
-	fmt.Println(name,pageNum,pageSize,"--")
+	// fmt.Println(name,pageNum,pageSize,"--")
 
 	/*
 		迷糊搜索，name为搜索的条件，根据电影的名称name来搜索

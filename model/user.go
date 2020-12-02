@@ -14,6 +14,7 @@ type User struct {
 	Desc      string `json:"desc" gorm:"varchar(225)"`
 	IP        string `json:"ip" gorm:"varchar(20)"`
 	ImgUrl    string `json:"imgUrl" gorm:"varchar(100)"`
+	ThemeColor	string 	`json:"themeColor" gorm:"varchar(20)"`
 }
 
 type UserDto struct {

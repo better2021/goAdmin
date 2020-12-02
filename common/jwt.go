@@ -15,7 +15,7 @@ type Claims struct {
 
 // 发放token
 func ReleaseToken(user model.User)(string,error){
-	expirationTime := time.Now().Add(7*24*time.Hour) // 设置token有效时间为7天
+	expirationTime := time.Now().Add(3*24*time.Hour) // 设置token有效时间为3天
 	claims := &Claims{
 		UserId: user.ID,
 		StandardClaims:jwt.StandardClaims{

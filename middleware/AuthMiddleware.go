@@ -13,7 +13,7 @@ func AuthMiddleware() gin.HandlerFunc{
 	return func(ctx *gin.Context) {
 		// 获取authorization header
 		tokenString := ctx.GetHeader("Authorization")
-		fmt.Print(tokenString,"token")
+		// fmt.Print(tokenString,"token")
 		// 验证token格式，token要Bearer 开头
 		if tokenString == "" || !strings.HasPrefix(tokenString,"Bearer "){
 			ctx.JSON(http.StatusUnauthorized,gin.H{"code":http.StatusUnauthorized,"msg":"token未携带或格式不对"})

@@ -37,11 +37,11 @@ func InitDB() *gorm.DB {
 	)
 
 	db, err := gorm.Open(driverName, args)
-	fmt.Println(driverName, args, "---")
+	// fmt.Println(driverName, args, "---")
 	if err != nil {
 		panic("faild to connect database,err" + err.Error())
 	} else {
-		fmt.Println("数据库连接成功")
+		// fmt.Println("数据库连接成功")
 	}
 
 	db.Set("gorm:table_options", "ENGINE=InnoDB  DEFAULT CHARSET=utf8;")
@@ -53,7 +53,7 @@ func InitDB() *gorm.DB {
 func InitConfig() {
 	// 获取当前的工作目录
 	workDir, _ := os.Getwd()
-	fmt.Println("当前文件的路劲:" + workDir)
+	// fmt.Println("当前文件的路劲:" + workDir)
 	// 设置要读取的文件名
 	viper.SetConfigName("application")
 	// 设置要读取的文件的类型
