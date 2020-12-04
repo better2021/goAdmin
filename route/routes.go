@@ -38,7 +38,12 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 		v1.PUT("/musics/:id",controller.MusicUpdate)
 		v1.DELETE("/musics/:id",controller.MusicDelete)
 
-		v1.POST("/upload",controller.UploadFile)
+		v1.GET("/notes",controller.NoteList)
+		v1.POST("/notes",controller.NoteCreate)
+		v1.DELETE("/notes/:id",controller.NoteDelete)
+
+		v1.POST("/upload",controller.UploadFile) 	// 单文件上传
+		v1.POST("/uploads",controller.UploadFiles)	// 多文件上传
 	}
 
 	// 未知路由处理

@@ -53,6 +53,20 @@ definitions:
         example: 年份
         type: string
     type: object
+  model.Note:
+    properties:
+      context:
+        example: 留言
+        type: string
+      icon:
+        example: 用户头像
+        type: string
+      id:
+        type: integer
+      userName:
+        example: 用户名称
+        type: string
+    type: object
   model.User:
     properties:
       desc:
@@ -72,6 +86,8 @@ definitions:
         type: string
       telephone:
         example: 手机号码
+        type: string
+      themeColor:
         type: string
     type: object
   model.UserDto:
@@ -563,6 +579,79 @@ paths:
       summary: 更新音乐列表
       tags:
       - 音乐
+  /api/notes:
+    get:
+      consumes:
+      - application/json
+      description: 留言列表
+      parameters:
+      - description: pageNum
+        in: query
+        name: pageNum
+        required: true
+        type: string
+      - description: pageSize
+        in: query
+        name: pageSize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Note'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 获取留言列表
+      tags:
+      - 留言
+    post:
+      consumes:
+      - application/json
+      description: 创建留言
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Note'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 创建留言列表
+      tags:
+      - 留言
+  /api/notes/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 留言列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Note'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 删除留言列表
+      tags:
+      - 留言
   /api/upload:
     post:
       consumes:
@@ -585,9 +674,34 @@ paths:
           description: '{ "code": 400, "message": "请求失败" }'
           schema:
             type: string
-      summary: 文件上传
+      summary: 单个文件上传
       tags:
       - 文件上传
+  /api/uploads:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 多文件上传
+      parameters:
+      - description: upload
+        in: query
+        name: file
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{ "code": 200, "message": "上传成功" }'
+          schema:
+            type: string
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 多个文件上传
+      tags:
+      - 多文件上传
   /api/users:
     get:
       consumes:

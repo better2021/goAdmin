@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// @Summary 文件上传
+// @Summary 单个文件上传
 // @Description 文件上传
 // @Tags 文件上传
 // @Accept multipart/form-data
@@ -52,7 +52,7 @@ func UploadFile(ctx *gin.Context)  {
 	// time.Now().Format("2006-01-02 15:04:05") 格式化时间
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":http.StatusOK,
-		"message":    "上传成功",
+		"msg":    "上传成功",
 		"imgUrl":     protocol + ctx.Request.Host + "/static/" + filename,
 		"createTime": time.Now().Format("2006-01-02 15:04:05"),
 	})
