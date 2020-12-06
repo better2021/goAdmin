@@ -18,10 +18,10 @@ import (
 // @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/uploads [post]
 func UploadFiles(ctx *gin.Context)  {
-	formdata := ctx.Request.MultipartForm
-	files := formdata.File["upload"]
+	formdata,_ := ctx.MultipartForm()
+	fmt.Println( formdata,"files")
+	files := formdata.File["file"]
 	num := len(files) // 文件数量
-
 	// 获取当前目录
 	dir,err := os.Getwd()
 	if err != nil{
@@ -46,7 +46,7 @@ func UploadFiles(ctx *gin.Context)  {
 			panic(err)
 		}
 
-		out,err := os.Create(dir + "/uploadFiles" + files[i].Filename)
+		out,err := os.Create(dir + "/uploadFiles/" + files[i].Filename)
 		defer out.Close()
 		if err != nil{
 			fmt.Println(err)

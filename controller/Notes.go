@@ -49,9 +49,10 @@ func NoteList(ctx *gin.Context)  {
 // @Router /api/notes [post]
 func NoteCreate(ctx *gin.Context)  {
 	var data = &model.Note{}
-	err := ctx.Bind(data)
+	err := ctx.ShouldBind(data)
 	if err != nil{
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	fmt.Println(data,"--")
