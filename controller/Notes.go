@@ -26,7 +26,8 @@ func NoteList(ctx *gin.Context)  {
 	fmt.Println(pageNum,pageSize)
 
 	var count int
-	db.Offset((pageNum - 1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&notes).Count(&count)
+	db.Find(&notes).Count(&count)
+	db.Offset((pageNum - 1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&notes)
 
 	ctx.JSON(http.StatusOK,gin.H{
 		"code":http.StatusOK,
