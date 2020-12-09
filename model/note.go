@@ -7,5 +7,6 @@ type Note struct {
 	Images  string `json:"images" example:"图片集"`
 	Icon string `json:"icon" example:"用户头像"`
 	Context string `json:"context" example:"留言"`
+	UserId uint `json:"userId" example:"用户id"`
 }
 
