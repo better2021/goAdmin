@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/skip2/go-qrcode"
 	"github.com/spf13/viper"
@@ -36,9 +37,10 @@ func main() {
 
 	r.GET("/api", func(c *gin.Context) {
 		host := c.Request.Host
+		fmt.Println(host,"host")
 		err := qrcode.WriteFile(host+"/swagger/index.html", qrcode.Medium, 256, "./uploadFiles/qrcode.png")
 		if err != nil {
-			panic(err)
+			fmt.Println(err)
 		}
 
 		var visit model.Visit
