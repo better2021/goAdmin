@@ -1,0 +1,11 @@
+# 注意：号的前面一定要有一个空格
+server:
+  port: 8081
+datasource:
+  driverName: mysql
+  host: 192.168.10.55  # 链接镜像中的mysql需要用ip地址，localhost或读取不到地址
+  port: 3306
+  database: goadmin
+  username: root
+  password: Aa778899
+  charset: utf8

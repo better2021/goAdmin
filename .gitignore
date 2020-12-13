@@ -15,7 +15,7 @@
 /.idea
 /.vscode
 
-/tmp
+# /tmp
 /uploadFiles
 
 
