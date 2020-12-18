@@ -42,6 +42,10 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 		v1.POST("/notes",controller.NoteCreate)
 		v1.DELETE("/notes/:id",controller.NoteDelete)
 
+		v1.GET("/ipWhite",controller.IpList)
+		v1.POST("/ipWhite",controller.IpsCreate)
+		v1.DELETE("/ipWhite/:id",controller.IpsDelete)
+
 		v1.POST("/upload",controller.UploadFile) 	// 单文件上传
 		v1.POST("/uploads",controller.UploadFiles)	// 多文件上传
 	}

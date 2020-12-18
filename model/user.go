@@ -38,3 +38,8 @@ func ToUserDto(user User) UserDto {
 type Visit struct {
 	VisitNum int `json:"visit_num" example:"访问次数"`
 }
+
+type IpWhite struct {
+	BasicModel
+	Ip string `json:"ip" gorm:"varchar(60);not null;unique" example:"ip白名单"`
+}

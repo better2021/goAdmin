@@ -36,6 +36,14 @@ definitions:
         example: 年份
         type: string
     type: object
+  model.IpWhite:
+    properties:
+      id:
+        type: integer
+      ip:
+        example: ip白名单
+        type: string
+    type: object
   model.Music:
     properties:
       actor:
@@ -63,6 +71,9 @@ definitions:
         type: string
       id:
         type: integer
+      images:
+        example: 图片集
+        type: string
       userName:
         example: 用户名称
         type: string
@@ -461,6 +472,74 @@ paths:
       summary: 获取验证码
       tags:
       - 验证码
+  /api/ipWhite:
+    get:
+      consumes:
+      - application/json
+      description: 白名单
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IpWhite'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 白名单列表
+      tags:
+      - 白名单
+    post:
+      consumes:
+      - application/json
+      description: 创建白名单
+      parameters:
+      - description: ip
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IpWhite'
+        "400":
+          description: '{ "code": 400, "message": "请求失败" }'
+          schema:
+            type: string
+      summary: 创建白名单列表
+      tags:
+      - 白名单
+  /api/ipWhite/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 白名单列表
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IpWhite'
+        "400":
+          description: '{ "code": 400, "message": "id必传" }'
+          schema:
+            type: string
+      summary: 删除白名单列表
+      tags:
+      - 白名单
   /api/musics:
     get:
       consumes:

@@ -3,15 +3,24 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"goAdmin/common"
+	"goAdmin/model"
 	"net/http"
 )
 
 // IP白名单
 func IPAuthMiddleWare() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ipList := []string{ // IP白名单
-			"127.0.0.1", "192.168.10.17","192.168.100.155","172.17.0.1",
+		var ips []model.IpWhite
+		db := common.InitDB()
+		db.Find(&ips)
+		// fmt.Println(ips,"ips")
+
+		var ipList = []string {"127.0.0.1"} // IP白名单,首先有默认ip为 127.0.0.1
+		for _,v := range ips{
+			ipList = append(ipList, v.Ip)
 		}
+
 		flag := false	/*如果要改为ip黑名单把flag:=false 改为true 调换即可*/
 		clientIp := ctx.ClientIP()
 		for _, host := range ipList {
