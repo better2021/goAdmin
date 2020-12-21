@@ -67,7 +67,7 @@ func main() {
 	r = route.CollectRouter(r)
 	port := viper.GetString("server.port")
 	if port != "" {
-		panic(r.Run(":" + port))
+		fmt.Println(r.Run(":" + port))
 	}
 
 	r.Run(port)
