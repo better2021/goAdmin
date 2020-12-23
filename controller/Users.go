@@ -310,7 +310,7 @@ func UserList(ctx *gin.Context){
 func UserDelete(ctx *gin.Context) {
 	id,err := strconv.Atoi(ctx.Param("id"))
 	if err != nil{
-		panic(err)
+		fmt.Println(err)
 	}
 
 	var u model.User

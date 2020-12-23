@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
@@ -43,7 +44,7 @@ func UploadFiles(ctx *gin.Context)  {
 		file,err := files[i].Open()
 		defer file.Close()
 		if err != nil{
-			panic(err)
+			log.Println(err)
 		}
 
 		out,err := os.Create(dir + "/uploadFiles/" + files[i].Filename)
