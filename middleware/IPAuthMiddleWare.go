@@ -17,7 +17,7 @@ func IPAuthMiddleWare() gin.HandlerFunc {
 		defer db.Close()
 		// fmt.Println(ips,"ips")
 
-		var ipList = []string {"127.0.0.1"} // IP白名单,首先有默认ip为 127.0.0.1
+		var ipList = []string {"127.0.0.1","172.17.0.1"} // IP白名单,首先有默认ip为 127.0.0.1
 		for _,v := range ips{
 			ipList = append(ipList, v.Ip)
 		}
