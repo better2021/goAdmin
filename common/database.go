@@ -2,15 +2,14 @@ package common
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/spf13/viper"
 	"goAdmin/model"
 	"log"
 	"net/url"
 	"os"
 	"time"
-
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/spf13/viper"
 )
 
 var db *gorm.DB
@@ -51,9 +50,9 @@ func InitDB() *gorm.DB {
 	// SetMaxIdleCons 设置连接池中的最大闲置连接数。
 	db.DB().SetMaxIdleConns(10)
 	// SetMaxOpenCons 设置数据库的最大连接数量。
-	db.DB().SetMaxOpenConns(100)
+	db.DB().SetMaxOpenConns(150)
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
-	db.DB().SetConnMaxLifetime(time.Hour)
+	db.DB().SetConnMaxLifetime(10*time.Minute)
 
 	db.Set("gorm:table_options", "ENGINE=InnoDB  DEFAULT CHARSET=utf8;")
 	db.AutoMigrate(&model.User{},&model.UserDto{},&model.Film{},&model.Book{},&model.Music{},&model.Note{},&model.IpWhite{},&model.Visit{})

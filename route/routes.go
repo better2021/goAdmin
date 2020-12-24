@@ -8,6 +8,7 @@ import (
 )
 
 func CollectRouter(r *gin.Engine) *gin.Engine{
+
 	// 静态资源文件
 	r.StaticFS("/static",http.Dir("uploadFiles"))
 	r.Use(middleware.CorsMiddleware(),middleware.IPAuthMiddleWare())
