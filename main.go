@@ -23,11 +23,12 @@ import (
 // @description An example of gin
 // @termsOfService 运行地址：http://localhost/swagger/index.html
 // @license.name MIT //localhost:80
+
 func main() {
 	f, _ := os.Create("gin.log")               // 创建gin.log日志文件
 	gin.DefaultErrorWriter = io.MultiWriter(f) // 错误信息写入gin.log日志文件
 
-	var db = common.InitDB()
+	db := common.InitDB()
 	defer db.Close()
 
 	r := gin.Default()

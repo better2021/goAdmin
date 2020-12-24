@@ -50,9 +50,9 @@ func InitDB() *gorm.DB {
 	// SetMaxIdleCons 设置连接池中的最大闲置连接数。
 	db.DB().SetMaxIdleConns(10)
 	// SetMaxOpenCons 设置数据库的最大连接数量。
-	db.DB().SetMaxOpenConns(150)
+	db.DB().SetMaxOpenConns(100)
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
-	db.DB().SetConnMaxLifetime(10*time.Minute)
+	db.DB().SetConnMaxLifetime(60*time.Second)
 
 	db.Set("gorm:table_options", "ENGINE=InnoDB  DEFAULT CHARSET=utf8;")
 	db.AutoMigrate(&model.User{},&model.UserDto{},&model.Film{},&model.Book{},&model.Music{},&model.Note{},&model.IpWhite{},&model.Visit{})

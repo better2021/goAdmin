@@ -36,6 +36,7 @@ func AuthMiddleware() gin.HandlerFunc{
 		var user  model.User
 		db := common.InitDB()
 		db.First(&user,userId)
+		db.Close()
 
 		// 用户不存在
 		if user.ID == 0{
