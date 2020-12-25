@@ -3,7 +3,7 @@ server:
   port: 8081
 datasource:
   driverName: mysql
-  host: 127.0.0.1  # 链接镜像中的mysql需要用ip地址，localhost或读取不到地址
+  host: 192.168.10.55  # 链接镜像中的mysql需要用ip地址，localhost或读取不到地址
   port: 3306
   database: goadmin
   username: root
