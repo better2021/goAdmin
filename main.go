@@ -9,8 +9,10 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"goAdmin/common"
 	_ "goAdmin/docs" // 注意这个一定要引入自己的docs
+	"goAdmin/middleware"
 	"goAdmin/model"
 	"goAdmin/route"
+	"goAdmin/socket"
 	"goAdmin/util"
 	"io"
 	"net/http"
@@ -28,7 +30,7 @@ func main() {
 	f, _ := os.Create("gin.log")               // 创建gin.log日志文件
 	gin.DefaultErrorWriter = io.MultiWriter(f) // 错误信息写入gin.log日志文件
 
-	db := common.InitDB()
+	var db = common.InitDB()
 	defer db.Close()
 
 	r := gin.Default()
@@ -36,6 +38,7 @@ func main() {
 	url := ginSwagger.URL("80/swagger.doc.json")
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
+	r.Use(middleware.CorsMiddleware())
 	r.GET("/api", func(c *gin.Context) {
 		host := c.Request.Host
 		fmt.Println(host,"host")
@@ -64,6 +67,8 @@ func main() {
 			"RemoteIP": RemoteIP,
 		})
 	})
+
+	r.GET("/ws",socket.WsHandler)
 
 	r = route.CollectRouter(r)
 	port := viper.GetString("server.port")

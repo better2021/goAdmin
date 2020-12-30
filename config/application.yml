@@ -1,6 +1,6 @@
 # 注意：号的前面一定要有一个空格
 server:
-    port: 8081
+    port: 8080
 datasource:
     driverName: mysql
     host: 127.0.0.1

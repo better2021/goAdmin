@@ -41,6 +41,7 @@ func BookList(ctx *gin.Context)  {
 			"total":count,
 		},
 	})
+
 }
 
 // @Summary 创建书籍列表

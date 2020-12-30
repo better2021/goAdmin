@@ -15,7 +15,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine{
 	r.POST("/api/auth/login",controller.Login)
 	r.POST("/api/auth/register",controller.Register)
 
-	r.Use(middleware.CorsMiddleware(),middleware.AuthMiddleware(),middleware.RecoveryMiddleware(),middleware.IPAuthMiddleWare()) // 使用跨域中间件 和 cover()及ip白名单 中间件
+	r.Use(middleware.AuthMiddleware(),middleware.RecoveryMiddleware()) // 使用跨域中间件 和 cover()及ip白名单 中间件
 	v1 := r.Group("/api")
 	{
 		v1.GET("/users",controller.UserList)
