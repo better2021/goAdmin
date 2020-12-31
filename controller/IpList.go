@@ -16,7 +16,7 @@ import (
 // @Success 200 {object} model.IpWhite
 // @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
 // @Router /api/ipWhite [get]
-func IpList(ctx *gin.Context)  {
+func IpList(ctx *gin.Context) {
 	var ips []model.IpWhite
 	db.Find(&ips)
 	ctx.JSON(http.StatusOK,gin.H{

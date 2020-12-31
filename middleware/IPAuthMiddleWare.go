@@ -3,8 +3,7 @@ package middleware
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"goAdmin/common"
-	"goAdmin/model"
+	"goAdmin/controller"
 	"net/http"
 	"time"
 )
@@ -13,11 +12,8 @@ import (
 func IPAuthMiddleWare() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		start := time.Now() // 当前时间
-		var ips []model.IpWhite
-		db := common.InitDB()
-		db.Find(&ips)
-		defer db.Close()
-		fmt.Println(ips,"ips")
+		var ips = controller.Ips()
+		fmt.Println(ips,"---")
 
 		var ipList = []string {"127.0.0.1","172.17.0.1"} // IP白名单,首先有默认ip为 127.0.0.1
 		for _,v := range ips{

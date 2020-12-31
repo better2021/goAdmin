@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goAdmin/common"
-	"goAdmin/model"
+	"goAdmin/controller"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func AuthMiddleware() gin.HandlerFunc{
@@ -31,12 +32,13 @@ func AuthMiddleware() gin.HandlerFunc{
 			return
 		}
 
+		start := time.Now()
 		// 验证通过获取claim 中的userId
 		userId := claims.UserId
-		var user  model.User
-		db := common.InitDB()
-		db.First(&user,userId)
-		defer db.Close()
+		user := controller.FindUser(userId)
+
+		elapsed := time.Since(start)
+		fmt.Println("耗时",elapsed)
 
 		// 用户不存在
 		if user.ID == 0{

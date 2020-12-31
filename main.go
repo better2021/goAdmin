@@ -3,21 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/skip2/go-qrcode"
+	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
-	"goAdmin/common"
+	"goAdmin/controller"
 	_ "goAdmin/docs" // 注意这个一定要引入自己的docs
 	"goAdmin/middleware"
-	"goAdmin/model"
 	"goAdmin/route"
 	"goAdmin/socket"
-	"goAdmin/util"
 	"io"
-	"net/http"
 	"os"
-	"time"
 )
 
 // @title Golang Gin API
@@ -30,7 +26,7 @@ func main() {
 	f, _ := os.Create("gin.log")               // 创建gin.log日志文件
 	gin.DefaultErrorWriter = io.MultiWriter(f) // 错误信息写入gin.log日志文件
 
-	var db = common.InitDB()
+	var db *gorm.DB
 	defer db.Close()
 
 	r := gin.Default()
@@ -39,35 +35,7 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	r.Use(middleware.CorsMiddleware())
-	r.GET("/api", func(c *gin.Context) {
-		host := c.Request.Host
-		fmt.Println(host,"host")
-		err := qrcode.WriteFile(host+"/swagger/index.html", qrcode.Medium, 256, "./uploadFiles/qrcode.png")
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		var visit model.Visit
-		db.Find(&visit) // 等价于 	db.Raw("SELECT * FROM visits").Scan(&visit)
-		visit.VisitNum++
-		db.Save(&visit)
-
-		ip := util.GetClientIp()
-		serverIp := util.GetServerIP()
-		RemoteIP := util.RemoteIP(c.Request)
-
-		c.JSON(http.StatusOK, gin.H{
-			"message":  "hello golang",
-			"time":     time.Now().Format("2006-01-02 15:04:05"),
-			"week":     util.Getweek(),
-			"qrcode":   "http://" + host + "/static/qrcode.png",
-			"visitNum": visit.VisitNum,
-			"ip":       ip,
-			"serverIp": serverIp,
-			"RemoteIP": RemoteIP,
-		})
-	})
-
+	r.GET("/api",controller.FindApi)
 	r.GET("/ws",socket.WsHandler)
 
 	r = route.CollectRouter(r)
