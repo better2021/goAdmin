@@ -2,10 +2,12 @@ package socket
 
 import (
 	"encoding/json"
+	"goAdmin/controller"
 	"log"
 	"net/http"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -210,7 +212,7 @@ func findToUserConnClient() interface{} {
 	toUserUid := clientMsg.Data.(map[string]interface{})["to_uid"].(string)
 
 	for _, conn := range rooms[roomIdInt] {
-		stringUid := strconv.FormatFloat(conn.Uid, "f", -1, 64)
+		stringUid := strconv.FormatFloat(conn.Uid, 'f', -1, 64)
 		if stringUid == toUserUid {
 			return conn
 		}
@@ -232,3 +234,96 @@ func notify(conn *websocket.Conn, msg string) {
 }
 
 // 离线通知
+func disconnenct(conn *websocket.Conn) {
+	_, roomIdInt := getRoomId()
+	for index, con := range rooms[roomIdInt] {
+		if con.RemoteAddr == conn.RemoteAddr().String() {
+			data := map[string]interface{}{
+				"username": con.Username,
+				"uid":      con.Uid,
+				"time":     time.Now().UnixNano() / 1e6, // 13位  10位 => now.Unix()
+			}
+
+			jsonStrServeMsg := msg{
+				Status: msgTypeOffline,
+				Data:   data,
+			}
+			serveMsgStr, _ := json.Marshal(jsonStrServeMsg)
+			disMsg := string(serveMsgStr)
+
+			mutex.Lock()
+			rooms[roomIdInt] = append(rooms[roomIdInt][:index], rooms[roomIdInt][index+1:]...)
+			con.Conn.Close()
+			mutex.Unlock()
+			notify(conn, disMsg)
+		}
+	}
+}
+
+// 格式化传递给客户端的消息数据
+func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
+	roomId, roomIdInt := getRoomId()
+
+	data := map[string]interface{}{
+		"username": clientMsg.Data.(map[string]interface{})["username"].(string),
+		"uid":      clientMsg.Data.(map[string]interface{})["uid"].(float64),
+		"room_id":  roomId,
+		"time":     time.Now().UnixNano() / 1e6, // 13位  10位 => now.Unix()
+	}
+
+	if status == msgTupeSend || status == msgTypePrivateChat {
+		data["avatar_id"] = clientMsg.Data.(map[string]interface{})["avatar_id"].(string)
+		data["content"] = clientMsg.Data.(map[string]interface{})["content"].(string)
+
+		toUidStr := clientMsg.Data.(map[string]interface{})["to_uid"].(string)
+		toUid, _ := strconv.Atoi(toUidStr)
+
+		// 保存消息
+		stringUid := strconv.FormatFloat(data["uid"].(float64), 'f', -1, 64)
+		intUid, _ := strconv.Atoi(stringUid)
+
+		if _, ok := clientMsg.Data.(map[string]interface{})["image_url"]; ok {
+			// 存在图片
+			controller.SaveContent(map[string]interface{}{
+				"user_id":    intUid,
+				"to_User_id": toUid,
+				"room_id":    data["room_id"],
+				"content":    data["content"],
+			})
+		}
+	}
+
+	if status == msgTypeGetOnlineUser {
+		ro := rooms[roomIdInt]
+		data["count"] = len(ro)
+		data["list"] = ro
+	}
+
+	jsonStrServeMsg := msg{
+		Status: status,
+		Data:   data,
+		Conn:   conn,
+	}
+	serveMsgStr, _ := json.Marshal(jsonStrServeMsg)
+
+	return serveMsgStr, jsonStrServeMsg
+
+}
+
+func getRoomId() (string, int) {
+	roomId := clientMsg.Data.(map[string]interface{})["room_id"].(string)
+	roomIdInt, _ := strconv.Atoi(roomId)
+	return roomId, roomIdInt
+}
+
+func GetOnlineUserCount() int {
+	num := 0
+	for i := 1; i < roomCount; i++ {
+		num = num + GetOnlineRoomUserCount(i)
+	}
+	return num
+}
+
+func GetOnlineRoomUserCount(roomId int) int {
+	return len(rooms[roomId])
+}

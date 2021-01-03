@@ -2,12 +2,13 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/skip2/go-qrcode"
 	"goAdmin/model"
 	"goAdmin/util"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/skip2/go-qrcode"
 )
 
 // 查找ip白名单列表并返回
@@ -18,15 +19,15 @@ func Ips() []model.IpWhite {
 }
 
 // 根据userId查找到对应好的user信息
-func FindUser(userId uint) model.User{
-	var user  model.User
-	db.First(&user,userId)
+func FindUser(userId uint) model.User {
+	var user model.User
+	db.First(&user, userId)
 	return user
 }
 
 func FindApi(c *gin.Context) {
 	host := c.Request.Host
-	fmt.Println(host,"host")
+	fmt.Println(host, "host")
 	err := qrcode.WriteFile(host+"/swagger/index.html", qrcode.Medium, 256, "./uploadFiles/qrcode.png")
 	if err != nil {
 		fmt.Println(err)
@@ -37,9 +38,9 @@ func FindApi(c *gin.Context) {
 	visit.VisitNum++
 	db.Save(&visit)
 
-	ip := util.GetClientIp()
-	serverIp := util.GetServerIP()
-	RemoteIP := util.RemoteIP(c.Request)
+	//ip := util.GetClientIp()
+	//serverIp := util.GetServerIP()
+	//RemoteIP := util.RemoteIP(c.Request)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":  "hello golang",
@@ -47,8 +48,8 @@ func FindApi(c *gin.Context) {
 		"week":     util.Getweek(),
 		"qrcode":   "http://" + host + "/static/qrcode.png",
 		"visitNum": visit.VisitNum,
-		"ip":       ip,
-		"serverIp": serverIp,
-		"RemoteIP": RemoteIP,
+		"ip":       c.ClientIP(),
+		//"serverIp": serverIp,
+		//"RemoteIP": RemoteIP,
 	})
 }

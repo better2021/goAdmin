@@ -1,3 +1,0 @@
-# goAdmin/socket
-socket\client.go:65:9: undefined: GetOnlineUserCount
-socket\client.go:69:9: undefined: GetOnlineRoomUserCount
