@@ -25,15 +25,6 @@ func SaveAvatarId(AvatarId string, u model.User) model.User {
 	return u
 }
 
-func FindUserByField(fieId, value string) model.User {
-	var u model.User
-
-	if fieId == "id" || fieId == "username" {
-		db.Where(fieId+"=?", value).First(&u)
-	}
-	return u
-}
-
 func GetOnlineUserList(uids []float64) []map[string]interface{} {
 	var results []map[string]interface{}
 	db.Where("id IN ?", uids).Find(&results)

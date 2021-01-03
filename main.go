@@ -37,7 +37,13 @@ func main() {
 
 	r.Use(middleware.CorsMiddleware())
 	r.GET("/api", controller.FindApi)
-	r.GET("/ws", socket.WsHandler)
+	// r.GET("/ws", socket.WsHandler)
+
+	r.GET("/ws", socket.Start)
+	r.GET("/onlineCount", socket.OnlineCount)
+	r.GET("/roomList", socket.RoomList)
+	r.GET("/room/:room_id", socket.Room)
+	r.GET("/private-chart", socket.PrivateChat)
 
 	r = route.CollectRouter(r)
 	port := viper.GetString("server.port")
