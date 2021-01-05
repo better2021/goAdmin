@@ -2,6 +2,7 @@ package socket
 
 import (
 	"encoding/json"
+	"fmt"
 	"goAdmin/controller"
 	"log"
 	"net/http"
@@ -21,7 +22,7 @@ type wsClients struct {
 	Uid        float64         `json:"uid"`
 	Username   string          `json:"username"`
 	RoomId     string          `json:"room_id"`
-	AvatarId   string          `json:"avatar_id"`
+	AvatarId   string          `json:"avatar_id"` // ImageUrl
 }
 
 // client 和 serve 的消息体
@@ -154,6 +155,7 @@ func writeLoop() {
 	}()
 
 	for {
+		fmt.Println()
 		select {
 		case r := <-enterRooms:
 			handleConnClients(r.Conn)
@@ -182,11 +184,10 @@ func writeLoop() {
 
 func handleConnClients(conn *websocket.Conn) {
 	roomId, roomIdInt := getRoomId()
-
 	for ckey, wcl := range rooms[roomIdInt] {
 		if wcl.Uid == clientMsg.Data.(map[string]interface{})["uid"].(float64) {
 			mutex.Lock()
-			// 通知当前影虎下线
+			// 通知当前用户下线
 			wcl.Conn.WriteMessage(websocket.TextMessage, []byte(`{"status":-1,"data":[]}`))
 			rooms[roomIdInt] = append(rooms[roomIdInt][:ckey], rooms[roomIdInt][ckey+1:]...)
 			wcl.Conn.Close()
@@ -226,9 +227,11 @@ func notify(conn *websocket.Conn, msg string) {
 	chNotify <- 1
 	_, roomIdInt := getRoomId()
 	for _, con := range rooms[roomIdInt] {
-		if con.RemoteAddr != conn.RemoteAddr().String() {
-			con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		}
+		con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+		fmt.Println(conn.RemoteAddr().String())
+		//if con.RemoteAddr != conn.RemoteAddr().String() {
+		//	con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+		//}
 	}
 	<-chNotify
 }
