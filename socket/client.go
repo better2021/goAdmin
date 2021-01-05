@@ -126,10 +126,10 @@ func readLoop(conn *websocket.Conn) {
 
 		_ = json.Unmarshal(message, &clientMsg)
 		log.Println("来自客户端的消息", clientMsg, conn.RemoteAddr())
+
 		if clientMsg.Data != nil {
 			if clientMsg.Status == msgTypeOnline { //  进入房间，建立链接
 				roomId, _ := getRoomId()
-
 				enterRooms <- wsClients{
 					Conn:       conn,
 					RemoteAddr: conn.RemoteAddr().String(),

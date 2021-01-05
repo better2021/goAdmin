@@ -3,6 +3,7 @@ package route
 import (
 	"goAdmin/controller"
 	"goAdmin/middleware"
+	"goAdmin/socket"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,7 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 	r.GET("/api/getCode", controller.GenerateCaptchaHandler)
 	r.POST("/api/auth/login", controller.Login)
 	r.POST("/api/auth/register", controller.Register)
+	r.GET("/api/ws", socket.Start)
 
 	r.Use(middleware.AuthMiddleware(), middleware.RecoveryMiddleware()) // 使用跨域中间件 和 cover()及ip白名单 中间件
 	v1 := r.Group("/api")
@@ -48,6 +50,11 @@ func CollectRouter(r *gin.Engine) *gin.Engine {
 
 		v1.POST("/upload", controller.UploadFile)   // 单文件上传
 		v1.POST("/uploads", controller.UploadFiles) // 多文件上传
+
+		v1.GET("/onlineCount", socket.OnlineCount)
+		v1.GET("/roomList", socket.RoomList)
+		v1.GET("/room/:room_id", socket.Room)
+		v1.GET("/private-chart", socket.PrivateChat)
 	}
 
 	// 未知路由处理

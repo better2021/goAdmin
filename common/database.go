@@ -2,14 +2,15 @@ package common
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/spf13/viper"
 	"goAdmin/model"
 	"log"
 	"net/url"
 	"os"
 	"time"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/spf13/viper"
 )
 
 var db *gorm.DB
@@ -53,7 +54,7 @@ func InitDB() *gorm.DB {
 		db.DB().SetConnMaxLifetime(time.Hour)
 
 		db.Set("gorm:table_options", "ENGINE=InnoDB  DEFAULT CHARSET=utf8;")
-		db.AutoMigrate(&model.User{},&model.UserDto{},&model.Film{},&model.Book{},&model.Music{},&model.Note{},&model.IpWhite{},&model.Visit{})
+		db.AutoMigrate(&model.User{}, &model.UserDto{}, &model.Film{}, &model.Book{}, &model.Music{}, &model.Note{}, &model.IpWhite{}, &model.Visit{}, &model.Message{})
 	}
 
 	return db

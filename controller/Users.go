@@ -257,9 +257,6 @@ func Info(ctx *gin.Context) map[string]interface{} {
 	data["img_url"] = u.ImgUrl
 	data["avatar_id"] = u.AvatarId
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
 	return data
 }
 

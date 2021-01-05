@@ -16,7 +16,7 @@
                 if (ws) {
                     return false;
                 }
-                ws = new WebSocket("ws://127.0.0.1:8080/ws")
+                ws = new WebSocket("ws://127.0.0.1:8080/api/ws")
                 ws.onopen = function(evt){
                     print("OPEN")
                     ws.send("websocket已开启")
