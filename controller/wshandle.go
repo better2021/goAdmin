@@ -14,13 +14,13 @@ func AddUser(value interface{}) model.User {
 	var u model.User
 	u.Name = value.(map[string]interface{})["name"].(string)
 	u.Password = value.(map[string]interface{})["password"].(string)
-	u.AvatarId = value.(map[string]interface{})["avatar_id"].(string)
+	u.ImgUrl = value.(map[string]interface{})["img_url"].(string)
 	db.Create(&u)
 	return u
 }
 
-func SaveAvatarId(AvatarId string, u model.User) model.User {
-	u.AvatarId = AvatarId
+func SaveImgUrl(ImgUrl string, u model.User) model.User {
+	u.ImgUrl = ImgUrl
 	db.Save(&u)
 	return u
 }
@@ -44,7 +44,7 @@ func SaveContent(value interface{}) model.Message {
 	m.RoomId = roomIdInt
 
 	if _, ok := value.(map[string]interface{})["image_url"]; ok {
-		m.ImageUrl = value.(map[string]interface{})["image_url"].(string)
+		m.ImgUrl = value.(map[string]interface{})["img_url"].(string)
 	}
 	db.Create(&m)
 	return m
@@ -54,7 +54,7 @@ func GetLimitMsg(roomId string, offset int) []map[string]interface{} {
 	var results []map[string]interface{}
 	var m model.Message
 	db.Model(&m).
-		Select("messages.*,users.name,users.avatar_id").
+		Select("messages.*,users.name,users.img_url").
 		Joins("INNER Join users on users.id = messages.user_id").
 		Where("messages.room_id="+roomId).
 		Where("messages.to_user_id = ?", 0).
@@ -73,7 +73,7 @@ func GetLimitMsg(roomId string, offset int) []map[string]interface{} {
 func GetLimitPrivateMsg(uid, toUId string, offset int) []map[string]interface{} {
 	var results []map[string]interface{}
 	db.Model(&model.Message{}).
-		Select("messages.*,users.name,users.avatar_id").
+		Select("messages.*,users.name,users.img_url").
 		Joins("INNER Join users on users.id = messages.user_id").
 		Where("(" +
 			"(" + "messages.user_id = " + uid + " and messages.to_user_id=" + toUId + ")" +

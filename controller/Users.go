@@ -255,7 +255,6 @@ func Info(ctx *gin.Context) map[string]interface{} {
 	data["uid"] = u.ID
 	data["name"] = u.Name
 	data["img_url"] = u.ImgUrl
-	data["avatar_id"] = u.AvatarId
 
 	return data
 }

@@ -6,5 +6,5 @@ type Message struct {
 	ToUserId int    `json:"to_user_id"`
 	RoomId   int    `json:"room_id"`
 	Content  string `json:"content"`
-	ImageUrl string `json:"image_url"`
+	ImgUrl   string `json:"img_url"`
 }

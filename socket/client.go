@@ -22,7 +22,7 @@ type wsClients struct {
 	Uid        float64         `json:"uid"`
 	Username   string          `json:"username"`
 	RoomId     string          `json:"room_id"`
-	AvatarId   string          `json:"avatar_id"` // ImageUrl
+	ImgUrl     string          `json:"img_url"`
 }
 
 // client 和 serve 的消息体
@@ -57,7 +57,7 @@ const msgTupeSend = 3          // 消息发送
 const msgTypeGetOnlineUser = 4 // 获取用户列表
 const msgTypePrivateChat = 5   // 私聊
 
-const roomCount = 6 // 房间总数
+const roomCount = 4 // 房间总数
 
 type GoServe struct {
 	ServeInterface
@@ -137,7 +137,7 @@ func readLoop(conn *websocket.Conn) {
 					Uid:        clientMsg.Data.(map[string]interface{})["uid"].(float64),
 					Username:   clientMsg.Data.(map[string]interface{})["username"].(string),
 					RoomId:     roomId,
-					AvatarId:   clientMsg.Data.(map[string]interface{})["avatar_id"].(string),
+					ImgUrl:     clientMsg.Data.(map[string]interface{})["img_url"].(string),
 				}
 			}
 			_, serveMsg := formatServeMsgStr(clientMsg.Status, conn)
@@ -155,7 +155,6 @@ func writeLoop() {
 	}()
 
 	for {
-		fmt.Println()
 		select {
 		case r := <-enterRooms:
 			handleConnClients(r.Conn)
@@ -177,11 +176,12 @@ func writeLoop() {
 				<-chNotify
 			}
 		case o := <-offline:
-			disconnenct(o)
+			disconnect(o)
 		}
 	}
 }
 
+// 处理建立连接的用户
 func handleConnClients(conn *websocket.Conn) {
 	roomId, roomIdInt := getRoomId()
 	for ckey, wcl := range rooms[roomIdInt] {
@@ -202,7 +202,7 @@ func handleConnClients(conn *websocket.Conn) {
 		Uid:        clientMsg.Data.(map[string]interface{})["uid"].(float64),
 		Username:   clientMsg.Data.(map[string]interface{})["username"].(string),
 		RoomId:     roomId,
-		AvatarId:   clientMsg.Data.(map[string]interface{})["avatar_id"].(string),
+		ImgUrl:     clientMsg.Data.(map[string]interface{})["img_url"].(string),
 	})
 	mutex.Unlock()
 }
@@ -226,9 +226,22 @@ func notify(conn *websocket.Conn, msg string) {
 	// 利用channel阻塞 避免并发去对同一个连接发送消息出现panic: concurrent write to websocket connection这样的异常
 	chNotify <- 1
 	_, roomIdInt := getRoomId()
+
+	//mutex.Lock()
+	//rooms[roomIdInt] = append(rooms[roomIdInt], wsClients{
+	//	Conn:       conn,
+	//	RemoteAddr: conn.RemoteAddr().String(),
+	//	Uid:        clientMsg.Data.(map[string]interface{})["uid"].(float64),
+	//	Username:   clientMsg.Data.(map[string]interface{})["username"].(string),
+	//	RoomId:     roomId,
+	//	ImgUrl:     clientMsg.Data.(map[string]interface{})["img_url"].(string),
+	//})
+	//mutex.Unlock()
+
+	fmt.Println(roomIdInt, rooms[roomIdInt], "----*-----", rooms)
 	for _, con := range rooms[roomIdInt] {
 		con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		fmt.Println(conn.RemoteAddr().String())
+		log.Println(conn.RemoteAddr().String(), "RemoteAddr---66- ")
 		//if con.RemoteAddr != conn.RemoteAddr().String() {
 		//	con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		//}
@@ -237,7 +250,7 @@ func notify(conn *websocket.Conn, msg string) {
 }
 
 // 离线通知
-func disconnenct(conn *websocket.Conn) {
+func disconnect(conn *websocket.Conn) {
 	_, roomIdInt := getRoomId()
 	for index, con := range rooms[roomIdInt] {
 		if con.RemoteAddr == conn.RemoteAddr().String() {
@@ -275,7 +288,7 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 	}
 
 	if status == msgTupeSend || status == msgTypePrivateChat {
-		data["avatar_id"] = clientMsg.Data.(map[string]interface{})["avatar_id"].(string)
+		data["img_url"] = clientMsg.Data.(map[string]interface{})["img_url"].(string)
 		data["content"] = clientMsg.Data.(map[string]interface{})["content"].(string)
 
 		toUidStr := clientMsg.Data.(map[string]interface{})["to_uid"].(string)
