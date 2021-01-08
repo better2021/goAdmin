@@ -1,4 +1,0 @@
-# goAdmin/socket
-socket\client.go:230:19: not enough arguments in call to handleConnClients
-	have ()
-	want (*websocket.Conn)

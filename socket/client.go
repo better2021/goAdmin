@@ -2,7 +2,6 @@ package socket
 
 import (
 	"encoding/json"
-	"fmt"
 	"goAdmin/controller"
 	"log"
 	"net/http"
@@ -105,7 +104,6 @@ func readLoop(conn *websocket.Conn) {
 	for {
 		// 读取消息
 		mt, message, err := conn.ReadMessage()
-		log.Println(mt, string(message))
 		// 离线通知
 		if err != nil {
 			offline <- conn
@@ -129,8 +127,8 @@ func readLoop(conn *websocket.Conn) {
 		log.Println("来自客户端的消息", clientMsg, conn.RemoteAddr())
 
 		if clientMsg.Data != nil {
+			roomId, _ := getRoomId()
 			if clientMsg.Status == msgTypeOnline { //  进入房间，建立链接
-				roomId, _ := getRoomId()
 				enterRooms <- wsClients{
 					Conn:       conn,
 					RemoteAddr: conn.RemoteAddr().String(),
@@ -140,8 +138,10 @@ func readLoop(conn *websocket.Conn) {
 					ImgUrl:     clientMsg.Data.(map[string]interface{})["img_url"].(string),
 				}
 			}
+
 			_, serveMsg := formatServeMsgStr(clientMsg.Status, conn)
 			sMsg <- serveMsg
+
 		}
 	}
 }
@@ -188,9 +188,9 @@ func handleConnClients(conn *websocket.Conn) {
 		if wcl.Uid == clientMsg.Data.(map[string]interface{})["uid"].(float64) {
 			mutex.Lock()
 			// 通知当前用户下线
-			wcl.Conn.WriteMessage(websocket.TextMessage, []byte(`{"status":-1,"data":[]}`))
+			// wcl.Conn.WriteMessage(websocket.TextMessage, []byte(`{"status":-1,"data":[]}`))
 			rooms[roomIdInt] = append(rooms[roomIdInt][:ckey], rooms[roomIdInt][ckey+1:]...)
-			wcl.Conn.Close()
+			// wcl.Conn.Close()
 			mutex.Unlock()
 		}
 	}
@@ -227,25 +227,16 @@ func notify(conn *websocket.Conn, msg string) {
 	chNotify <- 1
 	_, roomIdInt := getRoomId()
 
-	//mutex.Lock()
-	//rooms[roomIdInt] = append(rooms[roomIdInt], wsClients{
-	//	Conn:       conn,
-	//	RemoteAddr: conn.RemoteAddr().String(),
-	//	Uid:        clientMsg.Data.(map[string]interface{})["uid"].(float64),
-	//	Username:   clientMsg.Data.(map[string]interface{})["username"].(string),
-	//	RoomId:     roomId,
-	//	ImgUrl:     clientMsg.Data.(map[string]interface{})["img_url"].(string),
-	//})
-	//mutex.Unlock()
-
-	fmt.Println(roomIdInt, rooms[roomIdInt], "----*-----", rooms)
+	// fmt.Println(roomIdInt, rooms[roomIdInt], "----*-----", rooms)
 	for _, con := range rooms[roomIdInt] {
 		con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		log.Println(conn.RemoteAddr().String(), "RemoteAddr---66- ")
+		log.Println(conn.RemoteAddr().String(), "---RemoteAddr--- ")
+
 		//if con.RemoteAddr != conn.RemoteAddr().String() {
 		//	con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		//}
 	}
+
 	<-chNotify
 }
 
