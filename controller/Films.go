@@ -2,10 +2,11 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"goAdmin/model"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // @Summary 获取电影列表
@@ -23,22 +24,22 @@ func FilmList(ctx *gin.Context) {
 	var films []model.Film
 
 	name := ctx.Query("name")
-	userId,_ := strconv.Atoi(ctx.Query("userId"))
-	pageNum,_ := strconv.Atoi(ctx.DefaultQuery("pageNum","1"))
-	pageSize,_ := strconv.Atoi(ctx.DefaultQuery("pageSize","10"))
-	fmt.Println(name,pageNum,pageSize,userId,"--")
+	userId, _ := strconv.Atoi(ctx.Query("userId"))
+	pageNum, _ := strconv.Atoi(ctx.DefaultQuery("pageNum", "1"))
+	pageSize, _ := strconv.Atoi(ctx.DefaultQuery("pageSize", "10"))
+	fmt.Println(name, pageNum, pageSize, userId, "--")
 
 	var count int // 总数据条数
-	db.Model(&films).Where("name LIKE ? AND user_id = ?","%" + name + "%",userId).Count(&count)
-	db.Where("name LIKE ? AND user_id = ?","%" + name + "%",userId).Offset((pageNum-1)*pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
+	db.Model(&films).Where("name LIKE ? AND user_id = ?", "%"+name+"%", userId).Count(&count)
+	db.Where("name LIKE ? AND user_id = ?", "%"+name+"%", userId).Offset((pageNum - 1) * pageSize).Limit(pageSize).Order("created_at desc").Find(&films)
 
-	ctx.JSON(http.StatusOK,gin.H{
-		"code":http.StatusOK,
-		"msg":"请求成功",
-		"data":films,
-		"attr":gin.H{
-			"page":pageNum,
-			"total":count,
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "请求成功",
+		"data": films,
+		"attr": gin.H{
+			"page":  pageNum,
+			"total": count,
 		},
 	})
 }
@@ -59,17 +60,17 @@ func FilmList(ctx *gin.Context) {
 func FilmCreate(ctx *gin.Context) {
 	var data = &model.Film{}
 	err := ctx.Bind(data)
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(data,"--")
+	fmt.Println(data, "--")
 	db.Create(data)
-	ctx.JSON(http.StatusOK,gin.H{
-		"code":http.StatusOK,
-		"msg":"创建成功",
-		"data":data,
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "创建成功",
+		"data": data,
 	})
 }
 
@@ -83,21 +84,21 @@ func FilmCreate(ctx *gin.Context) {
 // @Failure 400 {string} string "{ "code": 400, "message": "id必传" }"
 // @Router /api/films/{id} [put]
 func FilmUpdate(ctx *gin.Context) {
-	id,_ := strconv.Atoi(ctx.Param("id"))
-	fmt.Println(id,"--")
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	fmt.Println(id, "--")
 
 	data := &model.Film{}
 	err := ctx.Bind(data)
-	if err !=nil{
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	db.Model(data).Where("id=?",id).Update(data)
-	ctx.JSON(http.StatusOK,gin.H{
-		"code":http.StatusOK,
-		"msg":"更新成功",
-		"data":data,
+	db.Model(data).Where("id=?", id).Update(data)
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "更新成功",
+		"data": data,
 	})
 }
 
@@ -110,14 +111,14 @@ func FilmUpdate(ctx *gin.Context) {
 // @Success 200 {object} model.Film
 // @Failure 400 {string} string "{ "code": 400, "message": "id必传" }"
 // @Router /api/films/{id} [delete]
-func FilmDelete(ctx *gin.Context)  {
-	id,_ := strconv.Atoi(ctx.Param("id"))
-	fmt.Println(id,"--")
+func FilmDelete(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	fmt.Println(id, "--")
 
-	db.Where("id=?",id).Delete(model.Film{})
-	ctx.JSON(http.StatusOK,gin.H{
-		"code":http.StatusOK,
-		"msg":"删除成功",
-		"id":id,
+	db.Where("id=?", id).Delete(model.Film{})
+	ctx.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"msg":  "删除成功",
+		"id":   id,
 	})
 }

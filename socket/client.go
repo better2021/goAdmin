@@ -2,6 +2,7 @@ package socket
 
 import (
 	"encoding/json"
+	"fmt"
 	"goAdmin/controller"
 	"log"
 	"net/http"
@@ -52,7 +53,7 @@ var (
 //  定义消息类型
 const msgTypeOnline = 1        // 上线
 const msgTypeOffline = 2       // 离线
-const msgTupeSend = 3          // 消息发送
+const msgTupeSend = 3          // 群聊消息发送
 const msgTypeGetOnlineUser = 4 // 获取用户列表
 const msgTypePrivateChat = 5   // 私聊
 
@@ -229,12 +230,12 @@ func notify(conn *websocket.Conn, msg string) {
 
 	// fmt.Println(roomIdInt, rooms[roomIdInt], "----*-----", rooms)
 	for _, con := range rooms[roomIdInt] {
-		con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+		// con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		log.Println(conn.RemoteAddr().String(), "---RemoteAddr--- ")
-
-		//if con.RemoteAddr != conn.RemoteAddr().String() {
-		//	con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		//}
+		log.Println(msg, "msg")
+		if con.RemoteAddr != conn.RemoteAddr().String() {
+			con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+		}
 	}
 
 	<-chNotify
@@ -289,6 +290,8 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 		stringUid := strconv.FormatFloat(data["uid"].(float64), 'f', -1, 64)
 		intUid, _ := strconv.Atoi(stringUid)
 
+		fmt.Println(data["img_url"], clientMsg.Data.(map[string]interface{})["img_url"].(string), "------------------------------------------+++++++++++++++")
+
 		if _, ok := clientMsg.Data.(map[string]interface{})["image_url"]; ok {
 			// 存在图片
 			controller.SaveContent(map[string]interface{}{
@@ -296,6 +299,16 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 				"to_User_id": toUid,
 				"room_id":    data["room_id"],
 				"content":    data["content"],
+				"img_url":    data["img_url"],                                      // 用户头像
+				"image_url":  clientMsg.Data.(map[string]interface{})["image_url"], // 传的图片
+			})
+		} else {
+			controller.SaveContent(map[string]interface{}{
+				"user_id":    intUid,
+				"to_user_id": toUid,
+				"content":    data["content"],
+				"room_id":    data["room_id"],
+				"img_url":    data["img_url"],
 			})
 		}
 	}

@@ -3,7 +3,6 @@ package socket
 import (
 	"goAdmin/controller"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -52,10 +51,10 @@ func RoomList(ctx *gin.Context) {
 
 	userInfo := controller.Info(ctx)
 	rooms := []map[string]interface{}{
-		{"id": 1, "num": OnlineRoomUserCount(1), "title": "聊天室1", "imgUrl": protocol + ctx.Request.Host + "/static/" + "f44c6367717440a29056fffc3ba1abdc.jpeg"},
-		{"id": 2, "num": OnlineRoomUserCount(2), "title": "聊天室2", "imgUrl": protocol + ctx.Request.Host + "/static/" + "asd.jfif"},
-		{"id": 3, "num": OnlineRoomUserCount(3), "title": "聊天室3", "imgUrl": protocol + ctx.Request.Host + "/static/" + "qrcode.png"},
-		{"id": 4, "num": OnlineRoomUserCount(4), "title": "聊天室4", "imgUrl": protocol + ctx.Request.Host + "/static/" + "5b0000042eaffa033da6.gif"},
+		{"id": 1, "num": OnlineRoomUserCount(1), "title": "聊天室", "imgUrl": protocol + ctx.Request.Host + "/static/" + "f44c6367717440a29056fffc3ba1abdc.jpeg"},
+		//{"id": 2, "num": OnlineRoomUserCount(2), "title": "聊天室2", "imgUrl": protocol + ctx.Request.Host + "/static/" + "asd.jfif"},
+		//{"id": 3, "num": OnlineRoomUserCount(3), "title": "聊天室3", "imgUrl": protocol + ctx.Request.Host + "/static/" + "qrcode.png"},
+		//{"id": 4, "num": OnlineRoomUserCount(4), "title": "聊天室4", "imgUrl": protocol + ctx.Request.Host + "/static/" + "5b0000042eaffa033da6.gif"},
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -66,16 +65,13 @@ func RoomList(ctx *gin.Context) {
 }
 
 /**
-聊天室
+聊天室历史记录
 */
 func Room(ctx *gin.Context) {
 	roomId := ctx.Param("room_id")
-
-	userInfo := controller.Info(ctx)
 	msgList := controller.GetLimitMsg(roomId, 0)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"user_info":      userInfo,
 		"msg_list":       msgList,
 		"msg_list_count": len(msgList),
 		"room_id":        roomId,
@@ -83,19 +79,16 @@ func Room(ctx *gin.Context) {
 }
 
 /**
-私聊
+私聊历史记录
 */
 func PrivateChat(ctx *gin.Context) {
 	roomId := ctx.Query("room_id")
-	toUid := ctx.Query("uid")
-
-	userInfo := controller.Info(ctx)
-	uid := strconv.Itoa(int(userInfo["uid"].(uint)))
+	uid := ctx.Query("uid")
+	toUid := ctx.Query("to_uid")
 	msgList := controller.GetLimitPrivateMsg(uid, toUid, 0)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"user_info": userInfo,
-		"msg_List":  msgList,
-		"room_id":   roomId,
+		"msg_List": msgList,
+		"room_id":  roomId,
 	})
 }
