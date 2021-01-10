@@ -49,7 +49,6 @@ func RoomList(ctx *gin.Context) {
 		protocol = "https://"
 	}
 
-	userInfo := controller.Info(ctx)
 	rooms := []map[string]interface{}{
 		{"id": 1, "num": OnlineRoomUserCount(1), "title": "聊天室", "imgUrl": protocol + ctx.Request.Host + "/static/" + "f44c6367717440a29056fffc3ba1abdc.jpeg"},
 		//{"id": 2, "num": OnlineRoomUserCount(2), "title": "聊天室2", "imgUrl": protocol + ctx.Request.Host + "/static/" + "asd.jfif"},
@@ -58,8 +57,7 @@ func RoomList(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"rooms":     rooms,
-		"user_info": userInfo,
+		"rooms": rooms,
 	})
 
 }

@@ -234,31 +234,6 @@ func Login(ctx *gin.Context) {
 	})
 }
 
-// @Summary 单个用户信息
-// @Description 用户信息
-// @Tags 用户
-// @Accept json
-// @Produce json
-// @Param name query string false "name"
-// @Param telephone query string false "telephone"
-// @Param token query string true "token"
-// @Success 200 {object} model.UserDto
-// @Failure 400 {string} string "{ "code": 400, "message": "请求失败" }"
-// @Router /api/auth/info [get]
-func Info(ctx *gin.Context) map[string]interface{} {
-	var u model.User
-	id, _ := strconv.Atoi(ctx.DefaultQuery("id", "1"))
-	name := ctx.Query("name")
-	db.Where("id = ? OR name = ?", id, name).First(&u)
-
-	data := make(map[string]interface{})
-	data["uid"] = u.ID
-	data["name"] = u.Name
-	data["img_url"] = u.ImgUrl
-
-	return data
-}
-
 // @Summary 获取用户列表
 // @Description 用户列表
 // @Tags 用户

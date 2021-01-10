@@ -2,7 +2,6 @@ package socket
 
 import (
 	"encoding/json"
-	"fmt"
 	"goAdmin/controller"
 	"log"
 	"net/http"
@@ -290,8 +289,6 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 		stringUid := strconv.FormatFloat(data["uid"].(float64), 'f', -1, 64)
 		intUid, _ := strconv.Atoi(stringUid)
 
-		fmt.Println(data["img_url"], clientMsg.Data.(map[string]interface{})["img_url"].(string), "------------------------------------------+++++++++++++++")
-
 		if _, ok := clientMsg.Data.(map[string]interface{})["image_url"]; ok {
 			// 存在图片
 			controller.SaveContent(map[string]interface{}{
@@ -299,6 +296,7 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 				"to_User_id": toUid,
 				"room_id":    data["room_id"],
 				"content":    data["content"],
+				"username":   data["username"],
 				"img_url":    data["img_url"],                                      // 用户头像
 				"image_url":  clientMsg.Data.(map[string]interface{})["image_url"], // 传的图片
 			})
@@ -307,6 +305,7 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 				"user_id":    intUid,
 				"to_user_id": toUid,
 				"content":    data["content"],
+				"username":   data["username"],
 				"room_id":    data["room_id"],
 				"img_url":    data["img_url"],
 			})

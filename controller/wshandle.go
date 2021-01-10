@@ -39,6 +39,7 @@ func SaveContent(value interface{}) model.Message {
 	m.ToUserId = value.(map[string]interface{})["to_user_id"].(int)
 	m.Content = value.(map[string]interface{})["content"].(string)
 	m.ImgUrl = value.(map[string]interface{})["img_url"].(string)
+	m.UserName = value.(map[string]interface{})["username"].(string)
 
 	roomIdStr := value.(map[string]interface{})["room_id"].(string)
 	roomIdInt, _ := strconv.Atoi(roomIdStr)
@@ -59,13 +60,8 @@ func GetLimitMsg(roomId string, offset int) []model.Message {
 	db.Model(&results).Select("messages.*, users.name ,users.img_url").
 		Joins("INNER Join users on users.id = messages.user_id").
 		Where("messages.room_id = ? AND messages.to_user_id = ?", roomId, 0).
-		Offset(offset).Limit(20).Find(&results)
+		Offset(offset).Limit(20).Scan(&results)
 
-	//if offset == 0 {
-	//	sort.Slice(results, func(i, j int) bool {
-	//		return results[i]["id"].(uint32) < results[j]["id"].(uint32)
-	//	})
-	//}
 	return results
 }
 

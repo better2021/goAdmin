@@ -17,26 +17,6 @@ type User struct {
 	ThemeColor string `json:"themeColor" gorm:"varchar(20)"`
 }
 
-type UserDto struct {
-	CreatedAt JSONTime `json:"createAt" example:"创建时间"`
-	UpdatedAt JSONTime `json:"updateAt" example:"更新时间"`
-	Name      string   `json:"name"`
-	Telephone string   `json:"telephone"`
-	ImgUrl    string   `json:"imgUrl" gorm:"varchar(100)"`
-	Desc      string   `json:"desc" gorm:"varchar(225)"`
-}
-
-func ToUserDto(user User) UserDto {
-	return UserDto{
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-		Name:      user.Name,
-		Telephone: user.Telephone,
-		ImgUrl:    user.ImgUrl,
-		Desc:      user.Desc,
-	}
-}
-
 type Visit struct {
 	VisitNum int `json:"visit_num" example:"访问次数"`
 }
