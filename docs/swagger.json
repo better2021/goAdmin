@@ -11,56 +11,6 @@
         "version": "2.0"
     },
     "paths": {
-        "/api/auth/info": {
-            "get": {
-                "description": "用户信息",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "单个用户信息",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "telephone",
-                        "name": "telephone",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.UserDto"
-                        }
-                    },
-                    "400": {
-                        "description": "{ \"code\": 400, \"message\": \"请求失败\" }",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/api/auth/login": {
             "post": {
                 "description": "用户登陆",
@@ -1283,20 +1233,6 @@
                     "example": "手机号码"
                 },
                 "themeColor": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.UserDto": {
-            "type": "object",
-            "properties": {
-                "desc": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "telephone": {
                     "type": "string"
                 }
             }

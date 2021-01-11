@@ -101,15 +101,6 @@ definitions:
       themeColor:
         type: string
     type: object
-  model.UserDto:
-    properties:
-      desc:
-        type: string
-      name:
-        type: string
-      telephone:
-        type: string
-    type: object
 info:
   contact: {}
   description: An example of gin
@@ -119,39 +110,6 @@ info:
   title: Golang Gin API
   version: "2.0"
 paths:
-  /api/auth/info:
-    get:
-      consumes:
-      - application/json
-      description: 用户信息
-      parameters:
-      - description: name
-        in: query
-        name: name
-        type: string
-      - description: telephone
-        in: query
-        name: telephone
-        type: string
-      - description: token
-        in: query
-        name: token
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.UserDto'
-        "400":
-          description: '{ "code": 400, "message": "请求失败" }'
-          schema:
-            type: string
-      summary: 单个用户信息
-      tags:
-      - 用户
   /api/auth/login:
     post:
       consumes:

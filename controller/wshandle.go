@@ -60,15 +60,23 @@ func GetLimitMsg(roomId string, offset int) []model.Message {
 	db.Model(&results).Select("messages.*, users.name ,users.img_url").
 		Joins("INNER Join users on users.id = messages.user_id").
 		Where("messages.room_id = ? AND messages.to_user_id = ?", roomId, 0).
-		Offset(offset).Limit(20).Scan(&results)
+		Order("messages.id desc").Offset(offset).
+		Limit(20).Scan(&results)
+
+	if offset == 0 {
+		sort.Slice(results, func(i, j int) bool { // 排序
+			return results[i].ID < results[j].ID
+		})
+	}
 
 	return results
 }
 
 // 私人聊天记录
-func GetLimitPrivateMsg(uid, toUId string, offset int) []map[string]interface{} {
-	var results []map[string]interface{}
-	db.Model(&model.Message{}).
+func GetLimitPrivateMsg(uid, toUId string, offset int) []model.Message {
+	var results []model.Message
+
+	db.Model(&results).
 		Select("messages.*,users.name,users.img_url").
 		Joins("INNER Join users on users.id = messages.user_id").
 		Where("(" +
@@ -78,12 +86,12 @@ func GetLimitPrivateMsg(uid, toUId string, offset int) []map[string]interface{} 
 			")").
 		Order("messages.id desc").
 		Offset(offset).
-		Limit(100).
+		Limit(20).
 		Scan(&results)
 
 	if offset == 0 {
 		sort.Slice(results, func(i, j int) bool {
-			return results[i]["id"].(uint32) < results[j]["id"].(uint32)
+			return results[i].ID < results[j].ID
 		})
 	}
 	return results
