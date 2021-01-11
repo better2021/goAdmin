@@ -50,10 +50,10 @@ func RoomList(ctx *gin.Context) {
 	}
 
 	rooms := []map[string]interface{}{
-		{"id": 1, "num": OnlineRoomUserCount(1), "title": "聊天室", "imgUrl": protocol + ctx.Request.Host + "/static/" + "f44c6367717440a29056fffc3ba1abdc.jpeg"},
-		//{"id": 2, "num": OnlineRoomUserCount(2), "title": "聊天室2", "imgUrl": protocol + ctx.Request.Host + "/static/" + "asd.jfif"},
-		//{"id": 3, "num": OnlineRoomUserCount(3), "title": "聊天室3", "imgUrl": protocol + ctx.Request.Host + "/static/" + "qrcode.png"},
-		//{"id": 4, "num": OnlineRoomUserCount(4), "title": "聊天室4", "imgUrl": protocol + ctx.Request.Host + "/static/" + "5b0000042eaffa033da6.gif"},
+		{"id": 1, "num": OnlineRoomUserCount(1), "title": "聊天室1", "imgUrl": protocol + ctx.Request.Host + "/static/" + "f44c6367717440a29056fffc3ba1abdc.jpeg"},
+		{"id": 2, "num": OnlineRoomUserCount(2), "title": "聊天室2", "imgUrl": protocol + ctx.Request.Host + "/static/" + "asd.jfif"},
+		{"id": 3, "num": OnlineRoomUserCount(3), "title": "聊天室3", "imgUrl": protocol + ctx.Request.Host + "/static/" + "qrcode.png"},
+		{"id": 4, "num": OnlineRoomUserCount(4), "title": "聊天室4", "imgUrl": protocol + ctx.Request.Host + "/static/" + "5b0000042eaffa033da6.gif"},
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{

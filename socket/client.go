@@ -225,15 +225,32 @@ func findToUserConnClient() interface{} {
 func notify(conn *websocket.Conn, msg string) {
 	// 利用channel阻塞 避免并发去对同一个连接发送消息出现panic: concurrent write to websocket connection这样的异常
 	chNotify <- 1
-	_, roomIdInt := getRoomId()
+	roomId, roomIdInt := getRoomId()
 
 	// fmt.Println(roomIdInt, rooms[roomIdInt], "----*-----", rooms)
 	for _, con := range rooms[roomIdInt] {
 		// con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
 		log.Println(conn.RemoteAddr().String(), "---RemoteAddr--- ")
-		log.Println(msg, "msg")
+
 		if con.RemoteAddr != conn.RemoteAddr().String() {
 			con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+			// 只要收到发的信息就推送chatIndex和房间id
+			if clientMsg.Status == msgTupeSend || clientMsg.Status == msgTypePrivateChat {
+				infos := map[string]interface{}{
+					"data": map[string]interface{}{
+						"room_id":   roomId,
+						"uid":       clientMsg.Data.(map[string]interface{})["uid"].(float64),
+						"chatIndex": clientMsg.Data.(map[string]interface{})["chatIndex"],
+						"code":      200,
+						"msg":       "消息发送成功",
+					},
+				}
+				jsonStr, _ := json.Marshal(infos)
+				err := conn.WriteMessage(websocket.TextMessage, []byte(jsonStr))
+				if err != nil {
+					log.Println(err, "err")
+				}
+			}
 		}
 	}
 
