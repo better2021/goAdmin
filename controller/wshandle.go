@@ -40,12 +40,11 @@ func SaveContent(value interface{}) model.Message {
 	m.Content = value.(map[string]interface{})["content"].(string)
 	m.ImgUrl = value.(map[string]interface{})["img_url"].(string)
 	m.UserName = value.(map[string]interface{})["username"].(string)
-
 	roomIdStr := value.(map[string]interface{})["room_id"].(string)
 	roomIdInt, _ := strconv.Atoi(roomIdStr)
 	m.RoomId = roomIdInt
 
-	if _, ok := value.(map[string]interface{})["image_url"]; ok {
+	if _, ok := value.(map[string]interface{})["image_url"].(string); ok {
 		m.ImageUrl = value.(map[string]interface{})["image_url"].(string)
 	}
 

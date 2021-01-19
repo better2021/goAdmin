@@ -141,7 +141,6 @@ func readLoop(conn *websocket.Conn) {
 
 			_, serveMsg := formatServeMsgStr(clientMsg.Status, conn)
 			sMsg <- serveMsg
-
 		}
 	}
 }
@@ -306,16 +305,17 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 		stringUid := strconv.FormatFloat(data["uid"].(float64), 'f', -1, 64)
 		intUid, _ := strconv.Atoi(stringUid)
 
-		if _, ok := clientMsg.Data.(map[string]interface{})["image_url"]; ok {
+		if _, ok := clientMsg.Data.(map[string]interface{})["image_url"].(string); ok {
+			data["image_url"] = clientMsg.Data.(map[string]interface{})["image_url"].(string)
 			// 存在图片
 			controller.SaveContent(map[string]interface{}{
 				"user_id":    intUid,
-				"to_User_id": toUid,
+				"to_user_id": toUid,
 				"room_id":    data["room_id"],
 				"content":    data["content"],
 				"username":   data["username"],
-				"img_url":    data["img_url"],                                      // 用户头像
-				"image_url":  clientMsg.Data.(map[string]interface{})["image_url"], // 传的图片
+				"img_url":    data["img_url"],   // 用户头像
+				"image_url":  data["image_url"], // 传的图片
 			})
 		} else {
 			controller.SaveContent(map[string]interface{}{
