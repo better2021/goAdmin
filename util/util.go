@@ -1,7 +1,12 @@
 package util
 
 import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"net"
 	"net/http"
@@ -13,24 +18,23 @@ import (
 // 导出随机字符串
 func RandomString(n int) string {
 	var letters = []byte("asdfghjklzxcvbnmASDFGHJKLZCVBNM")
-	result := make([]byte,n)
+	result := make([]byte, n)
 
 	rand.Seed(time.Now().Unix())
-	for i := range result{
+	for i := range result {
 		result[i] = letters[rand.Intn(len(letters))]
 	}
 	return string(result)
 }
 
-
 //	获取客户ip地址
 func GetClientIp() string {
-	addrs,_ := net.InterfaceAddrs()
+	addrs, _ := net.InterfaceAddrs()
 
-	for _,addres := range addrs{
+	for _, addres := range addrs {
 		// 检查ip地址判断是否回环地址
-		if ipnet,ok := addres.(*net.IPNet);ok && !ipnet.IP.IsLoopback(){
-			if ipnet.IP.To4() != nil{
+		if ipnet, ok := addres.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
 				return ipnet.IP.String()
 			}
 		}
@@ -48,27 +52,6 @@ func GetServerIP() string {
 			return ipv4.String()
 		}
 	}
-	return ""
-}
-
-// 获取客户ip
-// 解析 X-Real-IP 和 X-Forwarded-For 以便于反向代理（nginx 或 haproxy）可以正常工作。
-func ClientIP(r *http.Request) string {
-	xForwardedFor := r.Header.Get("X-Forwarded-For")
-	ip := strings.TrimSpace(strings.Split(xForwardedFor, ",")[0])
-	if ip != "" {
-		return ip
-	}
-
-	ip = strings.TrimSpace(r.Header.Get("X-Real-Ip"))
-	if ip != "" {
-		return ip
-	}
-
-	if ip, _, err := net.SplitHostPort(strings.TrimSpace(r.RemoteAddr)); err == nil {
-		return ip
-	}
-
 	return ""
 }
 
@@ -113,4 +96,51 @@ func Getweek() string {
 		datStr = "星期六"
 	}
 	return datStr
+}
+
+/**
+crypto的加解密
+*/
+func PKCS7Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS7UnPadding(plantText []byte) []byte {
+	length := len(plantText)
+	unpadding := int(plantText[length-1])
+	return plantText[:(length - unpadding)]
+}
+
+// AesEncrypt 加密函数
+func AesEncrypt(plaintext []byte, key, iv []byte) ([]byte, error) {
+	text := base64.StdEncoding.EncodeToString(plaintext)
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		log.Println(err, "err")
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	plaintext = PKCS7Padding(plaintext, blockSize)
+	blockMode := cipher.NewCBCEncrypter(block, iv)
+	crypted := make([]byte, len(text))
+	blockMode.CryptBlocks(crypted, plaintext)
+	return crypted, nil
+}
+
+// AesDecrypt 解密函数
+func AesDecrypt(ciphertext []byte, key, iv []byte) ([]byte, error) {
+	text, _ := base64.StdEncoding.DecodeString(string(ciphertext))
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		log.Println(err, "err")
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	blockMode := cipher.NewCBCDecrypter(block, iv[:blockSize])
+	origData := make([]byte, len(text))
+	blockMode.CryptBlocks(origData, text)
+	origData = PKCS7UnPadding(origData)
+	return origData, nil
 }

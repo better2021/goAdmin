@@ -3,6 +3,7 @@ package socket
 import (
 	"encoding/json"
 	"goAdmin/controller"
+	"goAdmin/util"
 	"log"
 	"net/http"
 	"strconv"
@@ -58,6 +59,9 @@ const msgTypePrivateChat = 5   // 私聊
 
 const roomCount = 4 // 房间总数
 
+var key = []byte("xViwLY6Auz1wd9sU")
+var iv = []byte("0BiT8j0ZelK4CjHa")
+
 type GoServe struct {
 	ServeInterface
 }
@@ -111,7 +115,11 @@ func readLoop(conn *websocket.Conn) {
 			break
 		}
 
-		serveMsgStr := message
+		// 解密消息
+		serveMsgStr, err := util.AesDecrypt(message, key, iv)
+		if err != nil {
+			log.Println("解密失败", err)
+		}
 
 		// 处理心跳响应,heartbeat为与客户段约定的值
 		if string(serveMsgStr) == "heartbeat" {
@@ -123,7 +131,7 @@ func readLoop(conn *websocket.Conn) {
 			continue
 		}
 
-		_ = json.Unmarshal(message, &clientMsg)
+		_ = json.Unmarshal(serveMsgStr, &clientMsg)
 		log.Println("来自客户端的消息", clientMsg, conn.RemoteAddr())
 
 		if clientMsg.Data != nil {
@@ -170,7 +178,12 @@ func writeLoop() {
 				chNotify <- 1
 				toC := findToUserConnClient()
 				if toC != nil {
-					toC.(wsClients).Conn.WriteMessage(websocket.TextMessage, serveMsgStr)
+					log.Println(serveMsgStr, "serveMsgStrserveMsgStr")
+					enMsg, err := util.AesEncrypt(serveMsgStr, key, iv)
+					if err != nil {
+						log.Println(err, "err")
+					}
+					toC.(wsClients).Conn.WriteMessage(websocket.TextMessage, enMsg)
 				}
 				<-chNotify
 			}
