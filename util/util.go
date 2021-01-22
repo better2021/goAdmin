@@ -115,7 +115,6 @@ func PKCS7UnPadding(plantText []byte) []byte {
 
 // AesEncrypt 加密函数
 func AesEncrypt(plaintext []byte, key, iv []byte) ([]byte, error) {
-	text := base64.StdEncoding.EncodeToString(plaintext)
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		log.Println(err, "err")
@@ -124,9 +123,10 @@ func AesEncrypt(plaintext []byte, key, iv []byte) ([]byte, error) {
 	blockSize := block.BlockSize()
 	plaintext = PKCS7Padding(plaintext, blockSize)
 	blockMode := cipher.NewCBCEncrypter(block, iv)
-	crypted := make([]byte, len(text))
+	crypted := make([]byte, len(plaintext))
 	blockMode.CryptBlocks(crypted, plaintext)
-	return crypted, nil
+	text := base64.StdEncoding.EncodeToString(crypted)
+	return []byte(text), nil
 }
 
 // AesDecrypt 解密函数

@@ -124,7 +124,9 @@ func readLoop(conn *websocket.Conn) {
 		// 处理心跳响应,heartbeat为与客户段约定的值
 		if string(serveMsgStr) == "heartbeat" {
 			// 写入消息
-			err = conn.WriteMessage(mt, []byte(`{"status":0,"data":"heartbeat ok"}`))
+			mes := []byte(`{"status":0,"data":"heartbeat ok"}`)
+			enMsg, _ := util.AesEncrypt(mes, key, iv)
+			err = conn.WriteMessage(mt, enMsg)
 			if err != nil {
 				break
 			}
@@ -167,22 +169,21 @@ func writeLoop() {
 			handleConnClients(r.Conn)
 		case cl := <-sMsg:
 			serveMsgStr, _ := json.Marshal(cl)
+			enMsg, err := util.AesEncrypt(serveMsgStr, key, iv)
+			if err != nil {
+				log.Println(err, "err")
+			}
 			switch cl.Status {
 			case msgTypeOnline, msgTupeSend:
-				notify(cl.Conn, string(serveMsgStr))
+				notify(cl.Conn, string(enMsg))
 			case msgTypeGetOnlineUser:
 				chNotify <- 1
-				cl.Conn.WriteMessage(websocket.TextMessage, serveMsgStr)
+				cl.Conn.WriteMessage(websocket.TextMessage, enMsg)
 				<-chNotify
 			case msgTypePrivateChat:
 				chNotify <- 1
 				toC := findToUserConnClient()
 				if toC != nil {
-					log.Println(serveMsgStr, "serveMsgStrserveMsgStr")
-					enMsg, err := util.AesEncrypt(serveMsgStr, key, iv)
-					if err != nil {
-						log.Println(err, "err")
-					}
 					toC.(wsClients).Conn.WriteMessage(websocket.TextMessage, enMsg)
 				}
 				<-chNotify
@@ -239,11 +240,7 @@ func notify(conn *websocket.Conn, msg string) {
 	chNotify <- 1
 	roomId, roomIdInt := getRoomId()
 
-	// fmt.Println(roomIdInt, rooms[roomIdInt], "----*-----", rooms)
 	for _, con := range rooms[roomIdInt] {
-		// con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
-		log.Println(conn.RemoteAddr().String(), "---RemoteAddr--- ")
-
 		if con.RemoteAddr != conn.RemoteAddr().String() {
 			con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
 			// 只要收到发的信息就推送chatIndex和房间id
@@ -258,7 +255,8 @@ func notify(conn *websocket.Conn, msg string) {
 					},
 				}
 				jsonStr, _ := json.Marshal(infos)
-				err := conn.WriteMessage(websocket.TextMessage, []byte(jsonStr))
+				enMsg, _ := util.AesEncrypt(jsonStr, key, iv)
+				err := conn.WriteMessage(websocket.TextMessage, []byte(enMsg))
 				if err != nil {
 					log.Println(err, "err")
 				}
@@ -285,8 +283,8 @@ func disconnect(conn *websocket.Conn) {
 				Data:   data,
 			}
 			serveMsgStr, _ := json.Marshal(jsonStrServeMsg)
-			disMsg := string(serveMsgStr)
-
+			enMsg, _ := util.AesEncrypt(serveMsgStr, key, iv)
+			disMsg := string(enMsg)
 			mutex.Lock()
 			rooms[roomIdInt] = append(rooms[roomIdInt][:index], rooms[roomIdInt][index+1:]...)
 			con.Conn.Close()
