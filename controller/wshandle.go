@@ -60,7 +60,7 @@ func GetLimitMsg(roomId string, offset int) []model.Message {
 		Joins("INNER Join users on users.id = messages.user_id").
 		Where("messages.room_id = ? AND messages.to_user_id = ?", roomId, 0).
 		Order("messages.id desc").Offset(offset).
-		Limit(20).Scan(&results)
+		Limit(30).Scan(&results)
 
 	if offset == 0 {
 		sort.Slice(results, func(i, j int) bool { // 排序
