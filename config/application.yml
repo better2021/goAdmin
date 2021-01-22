@@ -1,9 +1,9 @@
 # 注意：号的前面一定要有一个空格
 server:
-    port: 8080
+    port: 8088
 datasource:
     driverName: mysql
-    host: 127.0.0.1
+    host: 192.168.100.151
     port: 3306
     database: goadmin
     username: root
