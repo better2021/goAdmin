@@ -16,7 +16,7 @@ func IPAuthMiddleWare() gin.HandlerFunc {
 		var ips = controller.Ips()
 		fmt.Println(ips, "---")
 
-		var ipList = []string{"127.0.0.1", "172.17.0.1", "192.168.100.151", "192.168.100.147", "172.23.192.1"} // IP白名单,首先有默认ip为 127.0.0.1
+		var ipList = []string{"127.0.0.1", "172.17.0.1", "192.168.10.55", "192.168.100.151", "192.168.100.147", "172.23.192.1"} // IP白名单,首先有默认ip为 127.0.0.1
 		for _, v := range ips {
 			ipList = append(ipList, v.Ip)
 		}

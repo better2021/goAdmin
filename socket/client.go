@@ -51,6 +51,7 @@ var (
 )
 
 //  定义消息类型
+const msgTypeHeart = 0         // 心跳
 const msgTypeOnline = 1        // 上线
 const msgTypeOffline = 2       // 离线
 const msgTupeSend = 3          // 群聊消息发送
@@ -121,7 +122,7 @@ func readLoop(conn *websocket.Conn) {
 			log.Println("解密失败", err)
 		}
 
-		// 处理心跳响应,heartbeat为与客户段约定的值
+		// 处理心跳响应,heartbeat为与客户端约定的值
 		if string(serveMsgStr) == "heartbeat" {
 			// 写入消息
 			mes := []byte(`{"status":0,"data":"heartbeat ok"}`)
@@ -235,14 +236,14 @@ func findToUserConnClient() interface{} {
 }
 
 // 统一消息发放
-func notify(conn *websocket.Conn, msg string) {
+func notify(conn *websocket.Conn, message string) {
 	// 利用channel阻塞 避免并发去对同一个连接发送消息出现panic: concurrent write to websocket connection这样的异常
 	chNotify <- 1
 	roomId, roomIdInt := getRoomId()
 
 	for _, con := range rooms[roomIdInt] {
 		if con.RemoteAddr != conn.RemoteAddr().String() {
-			con.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+			con.Conn.WriteMessage(websocket.TextMessage, []byte(message))
 			// 只要收到发的信息就推送chatIndex和房间id
 			if clientMsg.Status == msgTupeSend || clientMsg.Status == msgTypePrivateChat {
 				infos := map[string]interface{}{
@@ -299,14 +300,15 @@ func formatServeMsgStr(status int, conn *websocket.Conn) ([]byte, msg) {
 	roomId, roomIdInt := getRoomId()
 
 	data := map[string]interface{}{
-		"username": clientMsg.Data.(map[string]interface{})["username"].(string),
-		"uid":      clientMsg.Data.(map[string]interface{})["uid"].(float64),
-		"room_id":  roomId,
-		"time":     time.Now().UnixNano() / 1e6, // 13位  10位 => now.Unix()
+		"username":    clientMsg.Data.(map[string]interface{})["username"].(string),
+		"uid":         clientMsg.Data.(map[string]interface{})["uid"].(float64),
+		"img_url":     clientMsg.Data.(map[string]interface{})["img_url"].(string),
+		"room_id":     roomId,
+		"remote_addr": conn.RemoteAddr().String(),
+		"time":        time.Now().UnixNano() / 1e6, // 13位  10位 => now.Unix()
 	}
 
 	if status == msgTupeSend || status == msgTypePrivateChat {
-		data["img_url"] = clientMsg.Data.(map[string]interface{})["img_url"].(string)
 		data["content"] = clientMsg.Data.(map[string]interface{})["content"].(string)
 
 		toUidStr := clientMsg.Data.(map[string]interface{})["to_uid"].(string)
