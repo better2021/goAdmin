@@ -119,6 +119,7 @@ func readLoop(conn *websocket.Conn) {
 		// 解密消息
 		serveMsgStr, err := util.AesDecrypt(message, key, iv)
 		if err != nil {
+			conn.Close() // 关闭ws连接
 			log.Println("解密失败", err)
 		}
 
@@ -172,7 +173,8 @@ func writeLoop() {
 			serveMsgStr, _ := json.Marshal(cl)
 			enMsg, err := util.AesEncrypt(serveMsgStr, key, iv)
 			if err != nil {
-				log.Println(err, "err")
+				cl.Conn.Close() // 关闭ws连接
+				log.Println(err, "加密失败")
 			}
 			switch cl.Status {
 			case msgTypeOnline, msgTupeSend:
