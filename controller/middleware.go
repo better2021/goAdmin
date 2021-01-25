@@ -38,10 +38,6 @@ func FindApi(c *gin.Context) {
 	visit.VisitNum++
 	db.Save(&visit)
 
-	//ip := util.GetClientIp()
-	//serverIp := util.GetServerIP()
-	//RemoteIP := util.RemoteIP(c.Request)
-
 	c.JSON(http.StatusOK, gin.H{
 		"message":  "hello golang",
 		"time":     time.Now().Format("2006-01-02 15:04:05"),
@@ -49,7 +45,5 @@ func FindApi(c *gin.Context) {
 		"qrcode":   "http://" + host + "/static/qrcode.png",
 		"visitNum": visit.VisitNum,
 		"ip":       c.ClientIP(),
-		//"serverIp": serverIp,
-		//"RemoteIP": RemoteIP,
 	})
 }
