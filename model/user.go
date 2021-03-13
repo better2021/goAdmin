@@ -23,5 +23,5 @@ type Visit struct {
 
 type IpWhite struct {
 	BasicModel
-	Ip string `json:"ip" gorm:"varchar(60);not null;unique" example:"ip白名单"`
+	Ip string `json:"ip" gorm:"varchar(60);not null;unique" example:"ip黑名单"`
 }

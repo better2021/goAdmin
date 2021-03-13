@@ -1,0 +1,2 @@
+# goAdmin/common
+common\database.go:57:95: undefined: model.IpWhite
